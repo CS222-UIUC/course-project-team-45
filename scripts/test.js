@@ -1,1 +1,3 @@
-console.log("testing #4");
+function test() {
+    console.log("CAN YOU SEE THIS?!");
+}
