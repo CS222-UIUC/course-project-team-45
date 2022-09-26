@@ -1,0 +1,23 @@
+{
+  "name": "course-project-team-45",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CS222-UIUC/course-project-team-45.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CS222-UIUC/course-project-team-45/issues"
+  },
+  "homepage": "https://github.com/CS222-UIUC/course-project-team-45#readme",
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.16"
+  }
+}
