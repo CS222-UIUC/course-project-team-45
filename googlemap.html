@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,
+        initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Google Map</title>
+        <style>
+            #map{
+                height:400px;
+                width:100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Google Map</h1>
+        <div id="map"></div>
+        <script>
+            function initMap() {
+                // Map options
+                var options = {
+                    // Is zoomed and centered at UIUC :D
+                    zoom:14,
+                    center:{ lat:40.1020, lng:-88.2272 },
+                }
+                // New map
+                var map = new
+                google.maps.Map(document.getElementById('map'), options);
+                
+                // Listen for click on map
+                google.maps.event.addListener(map, 'click', 
+                function(event){
+                    // Add temporary marker on map
+                    addMarker({coords:event.latLng});
+                });
+
+                // Array of markers
+                var markers = [
+                    { // Adds a marker at the onion
+                        coords:{lat:40.1092, lng:-88.2272},
+                        // use icon to use a custom icon
+                        //iconImage: ' (insert image file here) '
+                        content: '<h1>Union</h1>'
+                    },
+                    { // Adds a marker at (hell) Grainger Library
+                        coords:{lat:40.1125, lng:-88.2269},
+                        content: '<h1>Grainger Library</h1>'
+                    }
+                ];
+
+                // Loop through markers
+                for (var i = 0; i < markers.length; i++) {
+                    addMarker(markers[i]);
+                }
+
+               // Adds markers on map
+               function addMarker(props){
+                var marker = new google.maps.Marker({
+                    position:props.coords,
+                    map:map,
+                });
+                // Checks if there's custom icon
+                if (props.iconImage){
+                    // Sets icon image
+                    marker.setIcon(props.iconImage);
+                }
+                // Checks content
+                if (props.content){
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: props.content
+                    });
+                    // Creates a text box when icon is clicked on
+                    marker.addListener('click', function(){
+                        infoWindow.open(map,marker);
+                    });
+                }
+               }
+            }
+        </script>
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWlz6vY5McHXRgJrMB_Vx99sQkOtmiKlc&callback=initMap&v=weekly"
+            defer
+        ></script>
+
+    </body>
+</html>
