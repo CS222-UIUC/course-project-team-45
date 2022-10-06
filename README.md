@@ -1,1 +1,1 @@
-UIUC Class Path Optimizer
+# UIUC Class Path Optimizer
