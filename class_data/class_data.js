@@ -9,15 +9,11 @@ function getClassData(subject, number, year) {
     base_url += '&number=';
     base_url += String(number);
     console.log(base_url);
-    /*
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', base_url);
-    xhr.send();
     
-    xhr.onload = 
-    */
     fetch(base_url).then((response) =>
         response = response.json().then((jsonResponse) => {
+            //Problem here, how to port this class data array to elsewhere for use?
+            //Currently a local variable that will be deleted when the function is done
             let class_data = new Array();
 
             for (let i = 0; i < jsonResponse.length; i++) {
@@ -31,6 +27,7 @@ function getClassData(subject, number, year) {
                 }
             }
             console.log(class_data.toString());
+            //Test that the array is filled
             document.getElementById("Test").innerHTML = class_data[0].label;
         })
     ); 
@@ -64,6 +61,9 @@ function ClassSection(...data) {
     //If you don't need these methods you can just call the property name
 }
 
+//Thinking about using a function but not sure how to implement
+/*
 function saveData(class_data) {
 
 }
+*/
