@@ -11,10 +11,47 @@
             <a href="../main/aboutus.html">About Us</a>
 
         </nav>
+        <script>
+            const inputs = [];
+            function takeinput() {
+                let value1 = document.getElementById("inputbox1").value.toUpperCase();
+                let value2 = document.getElementById("inputbox2").value;
+                inputs.push(value1 + value2);
+                console.log(inputs.length);
+                displayInputs();
+            }
+            function displayInputs() {
+                let pog = '';
+                for (input of inputs) {
+                    pog += `<u><h3>${input}</h3></u>`;
+                    // for loop here
+                    pog += `<b>Section ABC</b>`;
+                    pog += `<p>Lecture: My bathroom</p>`;
+                    pog += `<p>Lab: My bathroom</p>`;
+                    pog += `<p>Discussion: My bathroom</p>`;
+                }
+                document.getElementById("listofstuffs").innerHTML = pog;
+            }
+            function deletePrev()
+            {
+                inputs.pop();
+                displayInputs();
+            }
+        </script>
         <main>
             <h1>Class Input</h1>
             <p>Input the information about the classes that you are currently taking.</p>
             <!--replace with a form to input classes-->
+            <label for="fname">Subject (CS,ECE,etc): </label><br>
+            <input type="text" id="inputbox1"><br><br>
+            <label for="fname">Number (124,225,etc): </label><br>
+            <input type="text" id="inputbox2"><br><br>
+
+            <input type="button" value="Submit" onclick="takeinput()">
+            <input type="button" value="Delete Last" onclick="deletePrev()">
+
+            <h2>List of Sections: </h2>
+            <div id="listofstuffs"></div>
         </main>
     </body>
 </html>
