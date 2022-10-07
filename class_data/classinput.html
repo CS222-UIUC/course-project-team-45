@@ -3,6 +3,7 @@
 <html>
     <head>
         <title>Class Input</title>
+        <link href="../main/style.css" rel="stylesheet">
     </head>
     <body>
         <nav>
@@ -36,6 +37,18 @@
             {
                 inputs.pop();
                 displayInputs();
+            }
+            function pes(){
+                var url = "https://cors-anywhere.herokuapp.com/https://uiuc-course-api.herokuapp.com/api/classes/?subject=CS&number=124";
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.onload = function () {
+                    var jsonResponse = xhr.response;
+                    console.log('crn' + JSON.parse(jsonResponse)[0].crn);
+                    // do something with jsonResponse
+                };
+                xhr.send();
             }
         </script>
         <main>
