@@ -4,6 +4,7 @@
 
 .title {
     font-weight: bold;
+    color: rgb(20, 13, 117);
 }
 
 body {
@@ -12,4 +13,16 @@ body {
 
 nav {
     font-weight: bold;
+    color:rgb(20, 13, 117);
+}
+
+p {
+    color: black;
+    font-weight: 400;
+}
+/* might change underline to bottom border */
+.name {
+    font-weight: 600;
+    color:rgb(20, 13, 117);
+    text-decoration: underline;
 }
