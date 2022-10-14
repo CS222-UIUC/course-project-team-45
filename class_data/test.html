@@ -3,13 +3,17 @@
 <html>
     <head>
         <title>Test ClassInput JS</title>
-        <script src = "class_data.js"></script>
-        <link href="../main/style.css" rel="stylesheet">
     </head>
     <body>
+        <nav>
+            <a href = "./test2.html">Go here to see if global access is working.</a>
+            <a href="classinput.html">Class Input</a>
+        </nav>
         <main>
-            <button type ="button" onclick="getClassData('cs', 124)">Click me!</button>
-            <p id = "Test">Change me to class name!</p>
+            <button type ="button" onclick="loadClassData('cS', 225, 'Fall 2022')">Click me!</button>
+            <p id = "test">Change me to class name!</p>
         </main>
+        <script src = "class_data.js"></script>
+        <script src = "test_global.js"></script>
     </body>
 </html>
