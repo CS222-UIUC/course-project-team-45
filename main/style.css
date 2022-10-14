@@ -1,28 +1,29 @@
-* {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+*  {
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 
-.title {
+.title  {
     font-weight: bold;
-    color: rgb(20, 13, 117);
+    color: rgb(20 13 117);
 }
 
-body {
-    background-color: rgb(242, 184, 142);
+body  {
+    background-color: rgb(242 184 142);
 }
 
-nav {
+nav  {
     font-weight: bold;
-    color:rgb(20, 13, 117);
+    color: rgb(20 13 117);
 }
 
-p {
+p  {
     color: black;
     font-weight: 400;
 }
+
 /* might change underline to bottom border */
-.name {
+.name  {
     font-weight: 600;
-    color:rgb(20, 13, 117);
+    color: rgb(20 13 117);
     text-decoration: underline;
 }
