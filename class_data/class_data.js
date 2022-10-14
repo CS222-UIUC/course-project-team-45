@@ -1,6 +1,3 @@
-// Global class data array (THIS ONLY EXISTS PER WEBPAGE)
-// Resides in window.CLASS_DATA
-const CLASS_DATA = []
 /*
 *   This function calls and returns the data from the API
 *   This function assumes the parameters are in the format string, number, string
@@ -15,6 +12,7 @@ function loadClassData (subject, number, year) {
   // eslint-disable-next-line no-return-assign
   fetch(baseUrl).then((response) =>
     response = response.json().then((jsonResponse) => {
+      const classData = []
       for (let i = 0; i < jsonResponse.length; i++) {
         const sections = jsonResponse[i]
         if (sections.yearterm === year) {
@@ -29,13 +27,12 @@ function loadClassData (subject, number, year) {
             type_code: sections.type_code,
             label: sections.label
           }
-          CLASS_DATA.push(section)
+          classData.push(section)
         }
       }
-      window.localStorage.setItem('CLASS_DATA', JSON.stringify(CLASS_DATA))
+      window.localStorage.setItem('CLASS_DATA', JSON.stringify(classData))
     })
   )
-  console.log(CLASS_DATA)
 }
 /*
 The object in the array has the following properties:
