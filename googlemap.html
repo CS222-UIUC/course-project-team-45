@@ -5,22 +5,12 @@
         <meta name="viewport" content="width=device-width,
         initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-        <!-- Boot strap -->
-        <link rel="stylesheet" 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-        crossorigin="anonymous">
         
+        <!-- Allows you to access and display the google API using a key -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWlz6vY5McHXRgJrMB_Vx99sQkOtmiKlc&callback=initMap&v=weekly"
+            defer></script>
+            
         <title>Google Map</title>
-        <style>
-            #map{
-                height:500px;
-                width:100%;
-            }
-        </style>
     </head>
     <body>
         <center>
@@ -38,99 +28,66 @@
         </center>
 
         <!-- Setting up the map block display -->
-        <div id="map"></div>
-
-        <!-- Geocoding-->
-        <script>
-            
-        </script>
-        <!-- In addition, sorts the array to the best paths possible -->
-        <script>
-
-        </script>
-
-
+        <div id="map" style="width:100%; height:500px"></div>
 
         <script>
-            function initMap() { 
-                // Map options
-                var options = {
+            // Initializes your map
+            function initMap() {
+                var geocoder = new google.maps.Geocoder();
+                // New map
+                var map = new google.maps.Map(document.getElementById('map'), {
                     // Is zoomed and centered at UIUC :D
                     zoom: 14,
                     center: { lat:40.1020, lng:-88.2272 },
-                }
-                // New map
-                var map = new
-                google.maps.Map(document.getElementById('map'), options);
-
-                /*
-                // Listen for click on map
-                google.maps.event.addListener(map, 'click', 
-                function(event){
-                    // Add temporary marker on map
-                    addMarker({coords:event.latLng});
                 });
-                */
 
-                // Array of markers
-                var markers = [
-                    { // Adds a marker at the onion
-                        coords: {lat:40.1092, lng:-88.2272},
-                        // use icon to use a custom icon
-                        //iconImage: ' (insert image file here) '
-                        content: '<h1>Union</h1>'
-                    },
-                    { // Adds a marker at (hell) Grainger Library
-                        coords: {lat:40.1125, lng:-88.2269},
-                        content: '<h1>Grainger Library</h1>'
-                    }
-                ];
-                // ^^^ for this you will probably replace it with a function that recieves an array of locations
+                // Array of markers: you will probably replace it with a function that recieves an array of locations
+                // var markers = [{coords: {lat:40.1092, lng:-88.2272}}, {coords: {lat:40.1125, lng:-88.2269}}];
                 
                 // Loop through markers
-                for (var i = 0; i < markers.length; i++) {
-                    addMarker(markers[i]);
-                }
+                // for (var i = 0; i < markers.length; i++) {
+                //     addMarker(markers[i]);
+                // }
+                codeAddress("Dublin");
+            }
 
-               // Adds markers on map
-               function addMarker(props){
-                var marker = new google.maps.Marker({
-                    position: props.coords,
-                    map: map,
+            // Geocodes Location and adds it onto map
+            function codeAddress(address) {
+                // // Adds markers on map
+                // function addMarker(props) {
+                //     var marker = new google.maps.Marker({
+                //         position: props.coords,
+                //         map: map,
+                //     });
+                //     // Use this if you wanna use a custom icon
+                //     // Use this format -> iconImage: '(insert image file here)'
+                //     /*
+                //     if (props.iconImage){
+                //         // Sets icon image
+                //         marker.setIcon(props.iconImage);
+                //     }
+                //     */
+                // }
+                geocoder.geocode({'address': address}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        // var latitude = results[0].geometry.location.lat();
+                        // var longitude = results[0].geometry.location.lng();
+                        // initialize(latitude,longitude);
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location
+                        });
+                    } else {
+                        alert('Geocode unsuccessful due to: ' + status);
+                    }
                 });
-                // Checks if there's custom icon
-                if (props.iconImage){
-                    // Sets icon image
-                    marker.setIcon(props.iconImage);
-                }
-                // Checks content
-                if (props.content){
-                    var infoWindow = new google.maps.InfoWindow({
-                        content: props.content
-                    });
-                    // Creates a text box when icon is clicked on
-                    marker.addListener('click', function(){
-                        infoWindow.open(map,marker);
-                    });
-                }
-               }
             }
         </script>
-        
-        <!-- Create a route between locations -->
+    <!--         
+        Create a route between locations
         <script>
 
-        </script>
-
-        <!-- Something something bootstrap -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-        <!-- Allows you to access and display the google API -->
-        <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWlz6vY5McHXRgJrMB_Vx99sQkOtmiKlc&callback=initMap&v=weekly"
-            defer
-        ></script>
+        </script> 
+    -->
     </body>
 </html>
