@@ -7,15 +7,64 @@
     </head>
     <body>
         <nav>
-            <a href="../main/index.html">UIUC Class Path Optimizer</a>
+            <a href="../index.html">UIUC Class Path Optimizer</a>
             <a href="../class_data/classinput.html">Class Input</a>
             <a href="../main/aboutus.html">About Us</a>
 
         </nav>
+        <script>
+            const inputs = [];
+            function takeinput() {
+                let value1 = document.getElementById("inputbox1").value.toUpperCase();
+                let value2 = document.getElementById("inputbox2").value;
+                inputs.push(value1 + value2);
+                console.log(inputs.length);
+                displayInputs();
+            }
+            function displayInputs() {
+                let pog = '';
+                for (input of inputs) {
+                    pog += `<u><h3>${input}</h3></u>`;
+                    // for loop here
+                    pog += `<b>Section ABC</b>`;
+                    pog += `<p>Lecture: My bathroom</p>`;
+                    pog += `<p>Lab: My bathroom</p>`;
+                    pog += `<p>Discussion: My bathroom</p>`;
+                }
+                document.getElementById("listofstuffs").innerHTML = pog;
+            }
+            function deletePrev()
+            {
+                inputs.pop();
+                displayInputs();
+            }
+            function pes(){
+                var url = "https://cors-anywhere.herokuapp.com/https://uiuc-course-api.herokuapp.com/api/classes/?subject=CS&number=124";
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.onload = function () {
+                    var jsonResponse = xhr.response;
+                    console.log('crn' + JSON.parse(jsonResponse)[0].crn);
+                    // do something with jsonResponse
+                };
+                xhr.send();
+            }
+        </script>
         <main>
             <h1 class="title">Class Input</h1>
             <p class="description">Input the information about the classes that you are currently taking.</p>
             <!--replace with a form to input classes-->
+            <label for="fname">Subject (CS,ECE,etc): </label><br>
+            <input type="text" id="inputbox1"><br><br>
+            <label for="fname">Number (124,225,etc): </label><br>
+            <input type="text" id="inputbox2"><br><br>
+
+            <input type="button" value="Submit" onclick="takeinput()">
+            <input type="button" value="Delete Last" onclick="deletePrev()">
+
+            <h2>List of Sections: </h2>
+            <div id="listofstuffs"></div>
         </main>
     </body>
 </html>
