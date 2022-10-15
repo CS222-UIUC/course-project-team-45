@@ -23,13 +23,14 @@
                 sections.push(value2);
                 displayInputs();
             }
-            function displayInputs() {
+            async function displayInputs() {
                 let pog = '';
                 for (let i = 0; i < subjects.length; i++) {
                     pog += `<u><h3>${subjects[i] + sections[i]}</h3></u>`;
                     // for loop here
-                    loadClassData(subjects[i],sections[i],'Fall 2022');
+                    await loadClassData(subjects[i],sections[i],'Fall 2022');
                     for (sect of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
+                        console.log("using class data")
                         pog += `<b>Section ${sect.section}</b>`;
                         pog += `<p>Building: ${sect.building}, Room ${sect.room}</p>`;
                         pog += `<p>Start: ${sect.start_time}</p>`;

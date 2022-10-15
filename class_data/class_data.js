@@ -4,13 +4,13 @@
 *   Assumes the year parameter is formatted correctly for comparison ("Spring 2022", for example)
 */
 // eslint-disable-next-line no-unused-vars
-function loadClassData (subject, number, year) {
+async function loadClassData (subject, number, year) {
   let baseUrl = 'https://uiuc-course-api.herokuapp.com/api/classes/?subject='
   baseUrl += subject.toUpperCase()
   baseUrl += '&number='
   baseUrl += String(number)
   // eslint-disable-next-line no-return-assign
-  fetch(baseUrl).then((response) =>
+  await fetch(baseUrl).then((response) =>
     response = response.json().then((jsonResponse) => {
       const classData = []
       for (let i = 0; i < jsonResponse.length; i++) {
@@ -31,6 +31,7 @@ function loadClassData (subject, number, year) {
         }
       }
       window.localStorage.setItem('CLASS_DATA', JSON.stringify(classData))
+      console.log("loading class data")
     })
   )
 }
