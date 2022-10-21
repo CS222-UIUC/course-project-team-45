@@ -1,3 +1,21 @@
+async function getLatLong(building) { 
+  // Geocoding using tomtom Place API
+  // May need to manually type out addresses for each building for this to work
+  let baseUrl = 'https://api.tomtom.com/search/2/search/';
+  let place = encodeURI(building).replace("'", "%27"); // URL encode building name
+  baseUrl += place;
+  baseUrl += '.json?lat=40.1020&lon=-88.2272&radius=5000&minFuzzyLevel=1&maxFuzzyLevel=2&view=Unified&relatedPois=off&key=AvmH2sk25s5jn09Mhc980ITYPNpfAm31';
+  await fetch(baseUrl).then((response) =>
+    response = response.json().then((jsonResponse) => {
+      const lat = jsonResponse.results[0].position.lat // Gets the first result's latitude
+      const long = jsonResponse.results[0].position.lon // Gets the first result's longitude
+      const latlong = [lat, long]
+      window.localStorage.setItem('LAT_LONG', JSON.stringify(latlong))
+      console.log("Calculating latitude and longitude for building...")
+    })
+  )
+}
+
 async function getTomTomDirections() {
     //need to add inputs to convert to lat and long, inputted as addresses
     let baseUrl = 'https://api.tomtom.com/routing/1/calculateRoute/'
@@ -13,10 +31,10 @@ async function getTomTomDirections() {
     //url is ready for request
     await fetch(baseUrl).then((response) =>
     response = response.json().then((jsonResponse) => {
+      let latlong = JSON.parse(window.localStorage.getItem('LAT_LONG')) // taken from getLatLong
       let instructions = jsonResponse["instructionGroups"]["groupMessage"];
       console.log(instructions);
     })
   )
     //document.getElementById("test").innerHTML = baseUrl;//whatever the output is
-
 }
