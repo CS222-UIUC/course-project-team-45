@@ -5,11 +5,15 @@ function listSections () {
   const list = document.getElementById('list')
   list.innerHTML = ''
   document.createElement('p').id = 'title'
-  document.getElementById('title').innerText = data[0].label
+  if (data.length === 0) {
+    document.getElementById('title').innerText = 'Empty!'
+  } else {
+    document.getElementById('title').innerText = data[0].label
 
-  for (const section of data) {
-    const li = document.createElement('li')
-    li.innerHTML += `${section.type}<ul><li>Building: ${section.building}</li><li>Room: ${section.room}</li><li>CRN: ${section.crn}</li></ul>`
-    list.appendChild(li)
+    for (const section of data) {
+      const li = document.createElement('li')
+      li.innerHTML += `${section.type}<ul><li>Building: ${section.building}</li><li>Room: ${section.room}</li><li>CRN: ${section.crn}</li></ul>`
+      list.appendChild(li)
+    }
   }
 }
