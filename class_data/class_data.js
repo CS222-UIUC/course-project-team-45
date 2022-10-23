@@ -127,3 +127,30 @@ function testaddremove () {
 function syncSchedule () {
   window.localStorage.setItem('SCHEDULE', window.localStorage.getItem('CLASS_DATA'))
 }
+
+// @param crn: section's crn to find
+// @param operation: 'ADD', 'REMOVE' - specifies the operation to perform
+// This function either adds a section from class_data into schedule, or remove a section from schedule
+// eslint-disable-next-line no-unused-vars
+function findSection (crn, operation) {
+  if (operation.toUpperCase() === 'ADD') {
+    const classData = JSON.parse(window.localStorage.getItem('CLASS_DATA'))
+    console.log(classData)
+    for (let i = 0; i < classData.length; i++) {
+      console.log(classData[i].crn)
+      if (crn === classData[i].crn) {
+        addSection(classData[i])
+        break
+      }
+    }
+  } else if (operation.toUpperCase() === 'REMOVE') {
+    const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
+    console.log(schedule)
+    for (let i = 0; i < schedule.length; i++) {
+      if (crn === schedule[i].crn) {
+        removeSection(schedule[i])
+        break
+      }
+    }
+  }
+}
