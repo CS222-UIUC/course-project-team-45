@@ -1,13 +1,15 @@
+// Example of how to get the class data for usage
 // eslint-disable-next-line no-unused-vars
 function listSections () {
-  const data = JSON.parse(window.localStorage.getItem('CLASS_DATA'))
+  const data = JSON.parse(window.localStorage.getItem('SCHEDULE'))
   const list = document.getElementById('list')
+  list.innerHTML = ''
   document.createElement('p').id = 'title'
   document.getElementById('title').innerText = data[0].label
 
   for (const section of data) {
     const li = document.createElement('li')
-    li.innerHTML += `${section.type}<ul><li>Building: ${section.building}</li><li>Room: ${section.room}</li></ul>`
+    li.innerHTML += `${section.type}<ul><li>Building: ${section.building}</li><li>Room: ${section.room}</li><li>CRN: ${section.crn}</li></ul>`
     list.appendChild(li)
   }
 }
