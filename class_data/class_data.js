@@ -160,27 +160,19 @@ async function displayInputs () {
 }
 
 function createDiv (operation, section) {
+  let element = ''
   if (operation.toUpperCase() === 'CLASS') {
-    let element = `<div class="section" onclick="addtoSched(${section.crn})">`
-    element += `<ul><li><b>Section ${section.section}</b>`
-    element += `<ul><li>Type: ${section.type}</li>`
-    element += `<li>CRN: ${section.crn}</li>`
-    element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
-    element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
-    element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
-    element += '</ul></li></ul></div>'
-    return element
+    element = `<div class="section" onclick="addtoSched(${section.crn})">`
   } else if (operation.toUpperCase() === 'SCHEDULE') {
-    let element = `<div class="sched-sect", onclick="removefromSched(${section.crn})">`
-    element += `<ul><li><b>${section.label} | Section ${section.section}</b>`
-    element += `<ul><li>Type: ${section.type}</li>`
-    element += `<li>CRN: ${section.crn}</li>`
-    element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
-    element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
-    element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
-    element += '</ul></li></ul></div>'
-    return element
+    element += `<ul><li><b>Section ${section.section}</b>`
   }
+  element += `<ul><li>Type: ${section.type}</li>`
+  element += `<li>CRN: ${section.crn}</li>`
+  element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
+  element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
+  element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
+  element += '</ul></li></ul></div>'
+  return element
 }
 
 // eslint-disable-next-line no-unused-vars
