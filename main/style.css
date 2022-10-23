@@ -28,15 +28,20 @@ p {
   text-decoration: underline;
 }
 
-.section,.sched-sect {
+.section,
+.sched-sect {
   background-color: transparent;
   width: fit-content;
-  padding: 10px 10px 10px 10px
+  padding: 10px;
 }
-.section:hover,.sched-sect:hover {
+
+.section:hover,
+.sched-sect:hover {
   background-color: green;
 }
-#listofstuffs, #sched {
+
+#listofstuffs,
+#sched {
   display: inline-grid;
   margin: auto;
 }

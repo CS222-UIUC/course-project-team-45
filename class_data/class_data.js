@@ -1,3 +1,6 @@
+const subjects = []
+const sections = []
+
 /*
 *   This function calls and returns the data from the API
 *   This function assumes the parameters are in the format string, number, string
@@ -101,29 +104,6 @@ All values are strings, crn is a number
 */
 
 // eslint-disable-next-line no-unused-vars
-function testaddremove () {
-  const data = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-  const section = {
-    building: 'New',
-    room: 'new',
-    days_of_week: 'new',
-    start_time: 'new',
-    end_time: 'new',
-    section: 'new',
-    type: 'new',
-    type_code: 'new',
-    label: 'new',
-    crn: 0
-  }
-  addSection(section)
-  let schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-  console.log(schedule)
-  removeSection(data[0])
-  schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-  console.log(schedule)
-}
-
-// eslint-disable-next-line no-unused-vars
 function syncSchedule () {
   window.localStorage.setItem('SCHEDULE', window.localStorage.getItem('CLASS_DATA'))
 }
@@ -154,71 +134,72 @@ function findSection (crn, operation) {
     }
   }
 }
-const subjects = [];
-const sections = [];
-function takeinput() {
-    let value1 = document.getElementById("inputbox1").value.toUpperCase();
-    let value2 = document.getElementById("inputbox2").value;
-    subjects.push(value1);
-    sections.push(value2);
-    displayInputs();
-    clearSchedule();
-}
-async function displayInputs() {
-    let pog = '';
-    for (let i = 0; i < subjects.length; i++) {
-        pog += `<h3>${subjects[i] + sections[i]}</h3>`;
-        // for loop here
-        await loadClassData(subjects[i],sections[i],'Fall 2022');
-        for (sect of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
-            console.log("using class data")
-            pogger = `<div class="section" onclick="addtoSched(${sect.crn})">`;
-            pogger += `<b>Section ${sect.section}</b>`;
-            pogger += `<p>Building: <span id="buildingName">${sect.building}<span>, Room ${sect.room}</p>`;
-            pogger += `<p>Start: ${sect.start_time}</p>`;
-            pogger += `<p>End: ${sect.end_time}</p>`;   
-            pogger += '</div>';
-            pog += pogger;
-            
-        }
 
-    }
-    document.getElementById("options").innerHTML = pog;
+// eslint-disable-next-line no-unused-vars
+function takeinput () {
+  const value1 = document.getElementById('inputbox1').value.toUpperCase()
+  const value2 = document.getElementById('inputbox2').value
+  subjects.push(value1)
+  sections.push(value2)
+  displayInputs()
+  clearSchedule()
 }
-function deletePrev()
-{
-    subjects.pop();
-    sections.pop()
-    displayInputs();
-}
-function addtoSched(section) 
-{  
-    findSection(section, "ADD");
-    sectArray = JSON.parse(window.localStorage.getItem('SCHEDULE'));
-    sect = sectArray[sectArray.length - 1];
-    
-    console.log("adding schedule section")
-    pogger = `<div class="sched-sect", onclick="removefromSched(${sect.crn},'REMOVE')">`;
-    pogger += `<b>${sect.label} | Section ${sect.section}</b>`;
-    pogger += `<p>Building: <span id="buildingName">${sect.building}<span>, Room ${sect.room}</p>`;
-    pogger += `<p>Start: ${sect.start_time}</p>`;
-    pogger += `<p>End: ${sect.end_time}</p>`;
-    pogger += '</div>';
 
-    document.getElementById("classes").innerHTML += pogger;
-}
-function removefromSched(section) {
-    findSection(section, 'REMOVE');
-    sectArray = JSON.parse(window.localStorage.getItem('SCHEDULE'));
-    pog = '';
-    for (sect of sectArray) {
-        pogger = `<div class="sched-sect", onclick="removefromSched(${sect.crn},'REMOVE')">`;
-        pogger += `<b>${sect.label} | Section ${sect.section}</b>`;
-        pogger += `<p>Building: <span id="buildingName">${sect.building}<span>, Room ${sect.room}</p>`;
-        pogger += `<p>Start: ${sect.start_time}</p>`;
-        pogger += `<p>End: ${sect.end_time}</p>`;
-        pogger += '</div>';
-        pog += pogger;
+async function displayInputs () {
+  let entry = ''
+  for (let i = 0; i < subjects.length; i++) {
+    entry += `<h3>${subjects[i] + sections[i]}</h3>`
+    // for loop here
+    await loadClassData(subjects[i], sections[i], 'Fall 2022')
+    for (const section of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
+      console.log('using class data')
+      entry += createDiv('CLASS', section)
     }
-    document.getElementById("classes").innerHTML = pog;
+  }
+  document.getElementById('options').innerHTML = entry
+}
+
+function createDiv (operation, section) {
+  let element = ''
+  if (operation.toUpperCase() === 'CLASS') {
+    element = `<div class="section" onclick="addtoSched(${section.crn})">`
+  } else if (operation.toUpperCase() === 'SCHEDULE') {
+    element += `<ul><li><b>Section ${section.section}</b>`
+  }
+  element += `<ul><li>Type: ${section.type}</li>`
+  element += `<li>CRN: ${section.crn}</li>`
+  element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
+  element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
+  element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
+  element += '</ul></li></ul></div>'
+  return element
+}
+
+// eslint-disable-next-line no-unused-vars
+function deletePrev () {
+  subjects.pop()
+  sections.pop()
+  displayInputs()
+}
+
+// eslint-disable-next-line no-unused-vars
+function addtoSched (crn) {
+  findSection(crn, 'ADD')
+  const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
+  const section = schedule[schedule.length - 1]
+
+  console.log('adding schedule section')
+
+  document.getElementById('classes').innerHTML += createDiv('SCHEDULE', section)
+}
+
+// eslint-disable-next-line no-unused-vars
+function removefromSched (crn) {
+  findSection(crn, 'REMOVE')
+  const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
+  let entry = ''
+  for (const section of schedule) {
+    entry += createDiv('SCHEDULE', section)
+  }
+  document.getElementById('classes').innerHTML = entry
 }
