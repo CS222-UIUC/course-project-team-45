@@ -153,18 +153,34 @@ async function displayInputs () {
     await loadClassData(subjects[i], sections[i], 'Fall 2022')
     for (const section of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
       console.log('using class data')
-      let element = `<div class="section" onclick="addtoSched(${section.crn})">`
-      element += `<ul><li><b>Section ${section.section}</b>`
-      element += `<ul><li>Type: ${section.type}</li>`
-      element += `<li>CRN: ${section.crn}</li>`
-      element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
-      element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
-      element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
-      element += '</ul></li></ul></div>'
-      entry += element
+      entry += createDiv('CLASS', section)
     }
   }
   document.getElementById('options').innerHTML = entry
+}
+
+function createDiv (operation, section) {
+  if (operation.toUpperCase() === 'CLASS') {
+    let element = `<div class="section" onclick="addtoSched(${section.crn})">`
+    element += `<ul><li><b>Section ${section.section}</b>`
+    element += `<ul><li>Type: ${section.type}</li>`
+    element += `<li>CRN: ${section.crn}</li>`
+    element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
+    element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
+    element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
+    element += '</ul></li></ul></div>'
+    return element
+  } else if (operation.toUpperCase() === 'SCHEDULE') {
+    let element = `<div class="sched-sect", onclick="removefromSched(${section.crn})">`
+    element += `<ul><li><b>${section.label} | Section ${section.section}</b>`
+    element += `<ul><li>Type: ${section.type}</li>`
+    element += `<li>CRN: ${section.crn}</li>`
+    element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
+    element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
+    element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
+    element += '</ul></li></ul></div>'
+    return element
+  }
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -181,16 +197,8 @@ function addtoSched (crn) {
   const section = schedule[schedule.length - 1]
 
   console.log('adding schedule section')
-  let element = `<div class="sched-sect", onclick="removefromSched(${section.crn},'REMOVE')">`
-  element += `<ul><li><b>${section.label} | Section ${section.section}</b>`
-  element += `<ul><li>Type: ${section.type}</li>`
-  element += `<li>CRN: ${section.crn}</li>`
-  element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
-  element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
-  element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
-  element += '</ul></li></ul></div>'
 
-  document.getElementById('classes').innerHTML += element
+  document.getElementById('classes').innerHTML += createDiv('SCHEDULE', section)
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -199,15 +207,7 @@ function removefromSched (crn) {
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
   let entry = ''
   for (const section of schedule) {
-    let element = `<div class="sched-sect", onclick="removefromSched(${section.crn},'REMOVE')">`
-    element += `<ul><li><b>${section.label} | Section ${section.section}</b>`
-    element += `<ul><li>Type: ${section.type}</li>`
-    element += `<li>CRN: ${section.crn}</li>`
-    element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
-    element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
-    element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
-    element += '</ul></li></ul></div>'
-    entry += element
+    entry += createDiv('SCHEDULE', section)
   }
   document.getElementById('classes').innerHTML = entry
 }

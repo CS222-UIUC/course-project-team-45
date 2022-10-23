@@ -40,7 +40,8 @@ p {
   background-color: green;
 }
 
-#listofstuffs, #sched {
+#listofstuffs, 
+#sched {
   display: inline-grid;
   margin: auto;
 }
