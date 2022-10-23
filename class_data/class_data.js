@@ -154,3 +154,71 @@ function findSection (crn, operation) {
     }
   }
 }
+const subjects = [];
+const sections = [];
+function takeinput() {
+    let value1 = document.getElementById("inputbox1").value.toUpperCase();
+    let value2 = document.getElementById("inputbox2").value;
+    subjects.push(value1);
+    sections.push(value2);
+    displayInputs();
+    clearSchedule();
+}
+async function displayInputs() {
+    let pog = '';
+    for (let i = 0; i < subjects.length; i++) {
+        pog += `<h3>${subjects[i] + sections[i]}</h3>`;
+        // for loop here
+        await loadClassData(subjects[i],sections[i],'Fall 2022');
+        for (sect of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
+            console.log("using class data")
+            pogger = `<div class="section" onclick="addtoSched(${sect.crn})">`;
+            pogger += `<b>Section ${sect.section}</b>`;
+            pogger += `<p>Building: <span id="buildingName">${sect.building}<span>, Room ${sect.room}</p>`;
+            pogger += `<p>Start: ${sect.start_time}</p>`;
+            pogger += `<p>End: ${sect.end_time}</p>`;   
+            pogger += '</div>';
+            pog += pogger;
+            
+        }
+
+    }
+    document.getElementById("options").innerHTML = pog;
+}
+function deletePrev()
+{
+    subjects.pop();
+    sections.pop()
+    displayInputs();
+}
+function addtoSched(section) 
+{  
+    findSection(section, "ADD");
+    sectArray = JSON.parse(window.localStorage.getItem('SCHEDULE'));
+    sect = sectArray[sectArray.length - 1];
+    
+    console.log("adding schedule section")
+    pogger = `<div class="sched-sect", onclick="removefromSched(${sect.crn},'REMOVE')">`;
+    pogger += `<b>${sect.label} | Section ${sect.section}</b>`;
+    pogger += `<p>Building: <span id="buildingName">${sect.building}<span>, Room ${sect.room}</p>`;
+    pogger += `<p>Start: ${sect.start_time}</p>`;
+    pogger += `<p>End: ${sect.end_time}</p>`;
+    pogger += '</div>';
+
+    document.getElementById("classes").innerHTML += pogger;
+}
+function removefromSched(section) {
+    findSection(section, 'REMOVE');
+    sectArray = JSON.parse(window.localStorage.getItem('SCHEDULE'));
+    pog = '';
+    for (sect of sectArray) {
+        pogger = `<div class="sched-sect", onclick="removefromSched(${sect.crn},'REMOVE')">`;
+        pogger += `<b>${sect.label} | Section ${sect.section}</b>`;
+        pogger += `<p>Building: <span id="buildingName">${sect.building}<span>, Room ${sect.room}</p>`;
+        pogger += `<p>Start: ${sect.start_time}</p>`;
+        pogger += `<p>End: ${sect.end_time}</p>`;
+        pogger += '</div>';
+        pog += pogger;
+    }
+    document.getElementById("classes").innerHTML = pog;
+}
