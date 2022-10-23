@@ -13,40 +13,6 @@
 
         </nav>
         <script src = "class_data.js"></script>
-        <script>
-            const subjects = [];
-            const sections = [];
-            function takeinput() {
-                let value1 = document.getElementById("inputbox1").value.toUpperCase();
-                let value2 = document.getElementById("inputbox2").value;
-                subjects.push(value1);
-                sections.push(value2);
-                displayInputs();
-            }
-            async function displayInputs() {
-                let pog = '';
-                for (let i = 0; i < subjects.length; i++) {
-                    pog += `<u><h3>${subjects[i] + sections[i]}</h3></u>`;
-                    // for loop here
-                    await loadClassData(subjects[i],sections[i],'Fall 2022');
-                    for (sect of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
-                        console.log("using class data")
-                        pog += `<b>Section ${sect.section}</b>`;
-                        pog += `<p>Building: ${sect.building}, Room ${sect.room}</p>`;
-                        pog += `<p>Start: ${sect.start_time}</p>`;
-                        pog += `<p>End: ${sect.end_time}</p>`;
-                    }
-
-                }
-                document.getElementById("listofstuffs").innerHTML = pog;
-            }
-            function deletePrev()
-            {
-                subjects.pop();
-                sections.pop()
-                displayInputs();
-            }
-        </script>
         <main>
             <h1 class="title">Class Input</h1>
             <p class="description">Input the information about the classes that you are currently taking.</p>
@@ -57,10 +23,20 @@
             <input type="text" id="inputbox2"><br><br>
 
             <input type="button" value="Submit" onclick="takeinput()">
-            <input type="button" value="Delete Last" onclick="deletePrev()">
+            <input type="button" value="Delete Last Class" onclick="deletePrev()">
+            <br>
+            <div id="listofstuffs">
+                <h2>List of Sections: </h2>
+                <div id="options">
 
-            <h2>List of Sections: </h2>
-            <div id="listofstuffs"></div>
+                </div>
+            </div>
+            <div id="sched">
+                <h2>Schedule: </h2>
+                <div id="classes">
+
+                </div>
+            </div>
         </main>
     </body>
 </html>
