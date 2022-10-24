@@ -163,8 +163,10 @@ function createDiv (operation, section) {
   let element = ''
   if (operation.toUpperCase() === 'CLASS') {
     element = `<div class="section" onclick="addtoSched(${section.crn})">`
-  } else if (operation.toUpperCase() === 'SCHEDULE') {
     element += `<ul><li><b>Section ${section.section}</b>`
+  } else if (operation.toUpperCase() === 'SCHEDULE') {
+    element = `<div class="sched-sect", onclick="removefromSched(${section.crn})">`
+    element += `<ul><li><b>${section.label} | Section ${section.section}</b>`
   }
   element += `<ul><li>Type: ${section.type}</li>`
   element += `<li>CRN: ${section.crn}</li>`
