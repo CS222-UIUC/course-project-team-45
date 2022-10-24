@@ -84,6 +84,8 @@ function removeSection (section) {
 function clearSchedule () {
   const schedule = []
   window.localStorage.setItem('SCHEDULE', JSON.stringify(schedule))
+  let entry = ''
+  document.getElementById('classes').innerHTML = entry
 }
 /*
 The object in the array has the following properties:
@@ -140,7 +142,7 @@ function takeinput () {
   subjects.push(value1)
   sections.push(value2)
   displayInputs()
-  clearSchedule()
+
 }
 
 async function displayInputs () {
