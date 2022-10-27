@@ -84,7 +84,7 @@ function removeSection (section) {
 function clearSchedule () {
   const schedule = []
   window.localStorage.setItem('SCHEDULE', JSON.stringify(schedule))
-  let entry = ''
+  const entry = ''
   document.getElementById('classes').innerHTML = entry
 }
 /*
@@ -117,6 +117,7 @@ function findSection (crn, operation) {
   if (operation.toUpperCase() === 'ADD') {
     const classData = JSON.parse(window.localStorage.getItem('CLASS_DATA'))
     for (let i = 0; i < classData.length; i++) {
+      console.log(i, classData.length)
       if (crn === classData[i].crn) {
         console.log('Adding ', classData[i])
         addSection(classData[i])
@@ -142,7 +143,6 @@ function takeinput () {
   subjects.push(value1)
   sections.push(value2)
   displayInputs()
-
 }
 
 async function displayInputs () {
