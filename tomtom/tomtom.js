@@ -1,4 +1,13 @@
+// Displays the map centered at UIUC
 var APIKEY = "AvmH2sk25s5jn09Mhc980ITYPNpfAm31";
+var UIUC = [-88.2272,40.1020];
+var map = tt.map({
+  key: APIKEY,
+  container: 'mymap',
+  center: UIUC,
+  zoom: 14,
+  style: 'tomtom://vector/1/basic-main'
+});
 
 async function getLatLong(building) { 
   // Geocoding using tomtom Place API
