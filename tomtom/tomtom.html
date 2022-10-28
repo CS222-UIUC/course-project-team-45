@@ -3,6 +3,9 @@
     <head>
         <title>TomTomTesting</title>
         <link href="../main/style.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps.css">
+        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps-web.min.js"></script>
+        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/services/services-web.min.js"></script>
     </head>
     <body>
         <nav>
@@ -10,10 +13,15 @@
             <a href="../class_data/classinput.html">Class Input</a>
             <a href="tomtom/tomtom.html">Map</a>
             <a href="../main/aboutus.html">About Us</a>
-            <a href="../class_data/test.html">Test</a>
         </nav>
-        <div id="mymap">Map</div>
+        <!-- May get rid of search button later on -->
+        <p>Hello! Please insert building you want to see displayed here:</p>
+        <input type="text" id="query" value="">
+        <button onclick="search()">Search</button>
+        
+        <p>Your classes and optimized routes will displayed at the map below. <br> Right click and hold to view and adjust the map in a different perspective!</p>
+        <div style="width:90vw; height:90vh;" id="mymap">Map</div>
         <script src="./tomtom.js"></script>
-
+        
     </body>
 </html>
