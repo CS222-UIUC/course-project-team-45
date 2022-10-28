@@ -5,29 +5,42 @@ var map = tt.map({
   key: APIKEY,
   container: 'mymap',
   center: UIUC,
-  zoom: 14,
+  zoom: 13,
   style: 'tomtom://vector/1/basic-main'
 });
 
-async function getLatLong(building) { 
-  // Geocoding using tomtom Place API
-  // May need to manually type out addresses for each building for this to work
-  let baseUrl = 'https://api.tomtom.com/search/2/search/';
-  let place = encodeURI(building).replace("'", "%27"); // URL encode building name
-  baseUrl += place;
-  baseUrl += '.json?lat=40.1020&lon=-88.2272&radius=5000&minFuzzyLevel=1&maxFuzzyLevel=2&view=Unified&relatedPois=off&key=';
-  baseUrl += APIKEY;
-  await fetch(baseUrl).then((response) =>
-    response = response.json().then((jsonResponse) => {
-      const lat = jsonResponse.results[0].position.lat // Gets the first result's latitude
-      const long = jsonResponse.results[0].position.lon // Gets the first result's longitude
-      const latlong = [lat, long]
-      window.localStorage.setItem('LAT_LONG', JSON.stringify(latlong))
-      console.log("Calculating latitude and longitude for building...")
-    })
-  )
+
+// Does the moving map animation when you insert a location
+function moveMap(lnglat) {
+  map.flyTo({
+    center: lnglat,
+    zoom: 18
+  });
 }
 
+// Handles search results
+function handleResults(result) {
+  console.log(result);
+  if (result.results) {
+    moveMap(result.results[0].position); // Long and latitude
+
+    // Creates a marker on lnglat
+    var marker = new tt.Marker()
+            .setLngLat(result.results[0].position)
+            .addTo(map);
+  }
+}
+
+// Helps find location data
+function search() {
+  tt.services.fuzzySearch({
+    key: APIKEY,
+    query: document.getElementById("query").value,
+    boundingBox: map.getBounds()
+  }).go().then(handleResults);
+}
+
+/*
 async function getTomTomDirections() {
     //need to add inputs to convert to lat and long, inputted as addresses
     let baseUrl = 'https://api.tomtom.com/routing/1/calculateRoute/'
@@ -50,3 +63,4 @@ async function getTomTomDirections() {
   )
     //document.getElementById("test").innerHTML = baseUrl;//whatever the output is
 }
+*/
