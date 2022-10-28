@@ -1,0 +1,10 @@
+.listofstuffs {
+    list-style-type: disc;
+    list-style-position: outside;
+    
+}
+
+.listofstuffs li {
+    background: rgb(237 212 166);
+    color: darkred;
+}
