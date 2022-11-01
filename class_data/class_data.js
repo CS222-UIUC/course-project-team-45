@@ -149,15 +149,15 @@ function takeinput () {
 
 async function displayInputs () {
   let entry = ''
-  for (let i = 0; i < subjects.length; i++) {
-    entry += `<h3>${subjects[i] + sections[i]}</h3>`
+  //for (let i = 0; i < subjects.length; i++) {
+    entry += `<h3>${subjects[subjects.length-1] + sections[subjects.length-1]}</h3>`
     // for loop here
-    await loadClassData(subjects[i], sections[i], 'Fall 2022')
+    await loadClassData(subjects[subjects.length-1], sections[subjects.length-1], 'Fall 2022')
     for (const section of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
       console.log('using class data')
       entry += createDiv('CLASS', section)
     }
-  }
+  //}
   document.getElementById('options').innerHTML = entry
 }
 
