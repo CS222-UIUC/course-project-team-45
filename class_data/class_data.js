@@ -207,3 +207,13 @@ function removefromSched (crn) {
   }
   document.getElementById('classes').innerHTML = entry
 }
+
+function displaySchedule() {
+  const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
+  let entry = ''
+  for (const section of schedule) {
+    entry += createDiv('SCHEDULE', section)
+  }
+  document.getElementById('classes').innerHTML = entry
+  console.log("loaded")
+}
