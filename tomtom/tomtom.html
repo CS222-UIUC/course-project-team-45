@@ -19,7 +19,12 @@
         <input type="text" id="query" value="">
         <button onclick="search()">Search</button>
         
-        <p>Your classes and optimized routes will displayed at the map below. <br> <i>Right click and hold to view and adjust the map in a different perspective!</i></p>
+        <p>After searching your buildings, click the button below to display your route!</p>
+        <div><button onclick="createRoute()">Create my Route!</button></div>
+        <div id="distance"></div>
+        <div id="time"></div>
+
+        <p>Your classes and optimized routes will displayed at the map below. <i>Right click and hold to view and adjust the map in a different perspective!</i></p>
         <div style="width:90vw; height:90vh;" id="mymap">Map</div>
         <script src="./tomtom.js"></script>
         
