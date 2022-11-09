@@ -31,7 +31,6 @@ async function loadClassData (subject, number, year) {
             label: sections.label,
             crn: sections.crn
           }
-          console.log(section)
           classData.push(section)
         }
       }
@@ -85,7 +84,7 @@ function removeSection (section) {
 function clearSchedule () {
   const schedule = []
   window.localStorage.setItem('SCHEDULE', JSON.stringify(schedule))
-  let entry = ''
+  const entry = ''
   document.getElementById('classes').innerHTML = entry
 }
 /*
@@ -117,19 +116,19 @@ function syncSchedule () {
 function findSection (crn, operation) {
   if (operation.toUpperCase() === 'ADD') {
     const classData = JSON.parse(window.localStorage.getItem('CLASS_DATA'))
-    console.log(classData)
     for (let i = 0; i < classData.length; i++) {
-      console.log(classData[i].crn)
+      console.log(i, classData.length)
       if (crn === classData[i].crn) {
+        console.log('Adding ', classData[i])
         addSection(classData[i])
         break
       }
     }
   } else if (operation.toUpperCase() === 'REMOVE') {
     const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-    console.log(schedule)
     for (let i = 0; i < schedule.length; i++) {
       if (crn === schedule[i].crn) {
+        console.log('Removed ', schedule[i])
         removeSection(schedule[i])
         break
       }
@@ -144,7 +143,6 @@ function takeinput () {
   subjects.push(value1)
   sections.push(value2)
   displayInputs()
-
 }
 
 async function displayInputs () {
@@ -199,8 +197,10 @@ function addtoSched (crn) {
 
 // eslint-disable-next-line no-unused-vars
 function removefromSched (crn) {
+  console.log('Removing crn ', crn)
   findSection(crn, 'REMOVE')
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
+  console.log(schedule)
   let entry = ''
   for (const section of schedule) {
     entry += createDiv('SCHEDULE', section)
