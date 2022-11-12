@@ -1,43 +1,94 @@
 // Displays the map centered at UIUC
-var APIKEY = "AvmH2sk25s5jn09Mhc980ITYPNpfAm31";
-var UIUC = [-88.2272,40.1020];
-var map = tt.map({
+const APIKEY = 'AvmH2sk25s5jn09Mhc980ITYPNpfAm31'
+const UIUC = [-88.2272, 40.1020]
+/* eslint-disable no-undef */
+const map = tt.map({
   key: APIKEY,
   container: 'mymap',
   center: UIUC,
   zoom: 13,
   style: 'tomtom://vector/1/basic-main'
 });
-
+var lnglats = [] // Our list of building lnglat
 
 // Does the moving map animation when you insert a location
-function moveMap(lnglat) {
+function moveMap (lnglat) {
   map.flyTo({
     center: lnglat,
     zoom: 18
-  });
+  })
 }
 
 // Handles search results
-function handleResults(result) {
-  console.log(result);
+function handleResults (result) {
+  console.log(result)
   if (result.results) {
-    moveMap(result.results[0].position); // Long and latitude
+    moveMap(result.results[0].position) // Long and latitude
+
+    lnglats.push(result.results[0].position); // Puts your result's lnglat into lnglats list to be used in route display
 
     // Creates a marker on lnglat
-    var marker = new tt.Marker()
-            .setLngLat(result.results[0].position)
-            .addTo(map);
+    // eslint-disable-next-line no-unused-vars
+    const marker = new tt.Marker()
+      .setLngLat(result.results[0].position)
+      .addTo(map)
   }
 }
 
 // Helps find location data
-function search() {
+// eslint-disable-next-line no-unused-vars
+function search () {
   tt.services.fuzzySearch({
     key: APIKEY,
-    query: document.getElementById("query").value,
+    query: document.getElementById('query').value,
     boundingBox: map.getBounds()
-  }).go().then(handleResults);
+  }).go().then(handleResults)
+}
+
+function displayRoute(geoJSON) {
+  routeLayer = map.addLayer({
+    'id' : 'route',
+    'type' : 'line',
+    'source' : {
+      'type' : 'geojson',
+      'data' : geoJSON
+    },
+    'paint' : {
+      'line-color' : 'blue',
+      'line-width' : 5,
+    }
+  });
+}
+
+// Creates route from building address list
+function createRoute() {
+  var routeOptions = {
+    key: APIKEY,
+    locations: [],
+    travelMode: 'pedestrian'
+  };
+
+  for (let i = 0; i < lnglats.length; i++) {
+    routeOptions.locations.push(lnglats[i]);
+  }
+
+  tt.services.calculateRoute(routeOptions).go().then(
+    function(routeData) {
+      // Displays your distance and time
+      document.getElementById('distance').innerHTML = 
+        "Total distance: " 
+        + (routeData.routes[0].summary.lengthInMeters * 0.000621371).toFixed(2)
+        + " miles";
+      document.getElementById('time').innerHTML = 
+        "Approximate Time: " 
+        + (routeData.routes[0].summary.travelTimeInSeconds / 60).toFixed(2)
+        + " min";
+
+      console.log(routeData);
+      var geo = routeData.toGeoJson();
+      displayRoute(geo);
+    }
+  );
 }
 
 /*
