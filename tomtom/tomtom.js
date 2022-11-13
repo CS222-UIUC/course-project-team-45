@@ -1,7 +1,8 @@
 // Displays the map centered at UIUC
-var APIKEY = "AvmH2sk25s5jn09Mhc980ITYPNpfAm31";
-var UIUC = [-88.2272,40.1020];
-var map = tt.map({
+const APIKEY = 'AvmH2sk25s5jn09Mhc980ITYPNpfAm31'
+const UIUC = [-88.2272, 40.1020]
+/* eslint-disable no-undef */
+const map = tt.map({
   key: APIKEY,
   container: 'mymap',
   center: UIUC,
@@ -9,7 +10,6 @@ var map = tt.map({
   style: 'tomtom://vector/1/basic-main'
 });
 let lnglats = [] // Our list of building lnglat
-
 
 // Does the moving map animation when you insert a location
 // function moveMap(lnglat) {
@@ -20,27 +20,29 @@ let lnglats = [] // Our list of building lnglat
 // }
 
 // Handles search results
-function handleResults(result) {
-  console.log(result);
+function handleResults (result) {
+  console.log(result)
   if (result.results) {
     // moveMap(result.results[0].position); // Long and latitude
 
     lnglats.push(result.results[0].position); // Puts your result's lnglat into lnglats list to be used in route display
 
     // Creates a marker on lnglat
-    var marker = new tt.Marker()
-            .setLngLat(result.results[0].position)
-            .addTo(map);
+    // eslint-disable-next-line no-unused-vars
+    const marker = new tt.Marker()
+      .setLngLat(result.results[0].position)
+      .addTo(map)
   }
 }
 
 // Helps find location data
-function search() {
+// eslint-disable-next-line no-unused-vars
+function search () {
   tt.services.fuzzySearch({
     key: APIKEY,
-    query: document.getElementById("query").value,
+    query: document.getElementById('query').value,
     boundingBox: map.getBounds()
-  }).go().then(handleResults);
+  }).go().then(handleResults)
 }
 
 function displayRoute(geoJSON) {
