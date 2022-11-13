@@ -3,6 +3,7 @@
     <head>
         <title>TomTomTesting</title>
         <link href="../main/style.css" rel="stylesheet">
+        <link href="mapstyle.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps.css">
         <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps-web.min.js"></script>
         <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/services/services-web.min.js"></script>
@@ -11,21 +12,33 @@
         <nav>
             <a href="../index.html">UIUC Class Path Optimizer</a>
             <a href="../class_data/classinput.html">Class Input</a>
-            <a href="tomtom/tomtom.html">Map</a>
+            <a href="tomtom.html">Map</a>
             <a href="../main/aboutus.html">About Us</a>
         </nav>
-        <!-- May get rid of search button later on -->
-        <p>Hello! Please insert building you want to see displayed here: <br> <i>Note: Some places do not work as it should.</i></p>
-        <input type="text" id="query" value="">
-        <button onclick="search()">Search</button>
-        
-        <p>After searching your buildings, click the button below to display your route!</p>
-        <div><button onclick="createRoute()">Create my Route!</button></div>
-        <div id="distance"></div>
-        <div id="time"></div>
 
-        <p>Your classes and optimized routes will displayed at the map below. <i>Right click and hold to view and adjust the map in a different perspective!</i></p>
-        <div style="width:90vw; height:90vh;" id="mymap">Map</div>
+        <div id="info">
+            <h2>Schedule:</h2>
+            <p>Choose a day, and a route to your classes on that day will displayed at the map below!</p>
+            <p>You may have to double click on the button for it to display properly.<br><i>It's a work in progress ;-;</i></p>
+
+            <input type ="button" onclick="displayScheduleRoute('M')" value="Monday">
+            <input type ="button" onclick="displayScheduleRoute('T')" value="Tuesday">
+            <input type ="button" onclick="displayScheduleRoute('W')" value="Wednesday">
+            <input type ="button" onclick="displayScheduleRoute('R')" value="Thursday">
+            <input type ="button" onclick="displayScheduleRoute('F')" value="Friday">
+            
+            <div id="classlist"></div>
+
+            <div id="test"></div>
+
+            <div id="distance"></div>
+            <div id="time"></div>
+        </div>
+
+        <div id="mymap"></div>
+
+        <script src="../class_data/class_data.js"></script>
+        <script src="../schedule/address_map.js"></script>
         <script src="./tomtom.js"></script>
         
     </body>
