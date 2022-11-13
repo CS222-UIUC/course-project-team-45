@@ -35,17 +35,16 @@ function clear_() {
   document.getElementById('classlist').innerHTML = '';
   document.getElementById('distance').innerHTML = '';
   document.getElementById('time').innerHTML = '';
-  lnglats = [];
-  for (let i = 0; i < markers.length; i++) {
-    markers[i].remove();
+  for (mark of markers) {
+    mark.remove();
   }
+  markers = [];
 }
 
 // Handles search results
 function handleResults (result) {
   console.log(result)
   if (result.results) {
-
     lnglats.push(result.results[0].position); // Stores your result's lnglat to be used in route display
 
     // Creates a marker on lnglat
@@ -107,8 +106,8 @@ function createRoute() {
 }
 
 function displaySchedule(section) {
-  let element = `<p>${section.label}<br>`
-  element += `Type: ${section.type}<br>`
+  let element = `<p>${section.label} `
+  element += `(${section.type})<br>`
   element = (section.building === null) ? element + 'Location: <span id="buildingName">N/A<span><br>' : element + `Location: ${section.room} <span id="buildingName">${section.building}<span><br>`
   element = (section.start_time === 'ARRANGED') ? element + `Time: ${section.start_time}` : element + `Time: ${section.start_time} - ${section.end_time}`
   element += '<br></p>'
@@ -142,7 +141,12 @@ function displayScheduleRoute(day) {
   }
   // Displays the route corresponding to each day
   createRoute();
-  //moveMap(); // Long and latitude
+
+  // Moves map based on the average lnglat of each location
+  // moveMap();
+
+  // resets our paths after creating route
+  lnglats = [];
 }
 
 
