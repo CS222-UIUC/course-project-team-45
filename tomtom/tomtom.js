@@ -1,6 +1,6 @@
 // Displays the map centered at UIUC
-const APIKEY = 'AvmH2sk25s5jn09Mhc980ITYPNpfAm31'
-const UIUC = [-88.2272, 40.1020]
+const APIKEY = 'AvmH2sk25s5jn09Mhc980ITYPNpfAm31';
+const UIUC = [-88.2272, 40.1020];
 /* eslint-disable no-undef */
 const map = tt.map({
   key: APIKEY,
@@ -9,7 +9,8 @@ const map = tt.map({
   zoom: 13,
   style: 'tomtom://vector/1/basic-main'
 });
-let lnglats = [] // Our list of building lnglat
+
+let lnglats = []; // Our list of building lnglat
 
 // Does the moving map animation when you insert a location
 // function moveMap(lnglat) {
@@ -19,28 +20,34 @@ let lnglats = [] // Our list of building lnglat
 //   });
 // }
 
+// Resets the map / schedule display if you click another button
+function clear_() {
+  document.getElementById('classlist').innerHTML = '';
+  document.getElementById('distance').innerHTML = '';
+  document.getElementById('time').innerHTML = '';
+  //lnglats = [];
+  //clear();
+}
+
 // Handles search results
 function handleResults (result) {
   console.log(result)
   if (result.results) {
     // moveMap(result.results[0].position); // Long and latitude
 
-    lnglats.push(result.results[0].position); // Puts your result's lnglat into lnglats list to be used in route display
+    lnglats.push(result.results[0].position); // Stores your result's lnglat to be used in route display
 
     // Creates a marker on lnglat
-    // eslint-disable-next-line no-unused-vars
-    const marker = new tt.Marker()
-      .setLngLat(result.results[0].position)
-      .addTo(map)
+    const marker = new tt.Marker();
+    marker.setLngLat(result.results[0].position).addTo(map);
   }
 }
 
 // Helps find location data
-// eslint-disable-next-line no-unused-vars
-function search () {
+function search (address) {
   tt.services.fuzzySearch({
     key: APIKEY,
-    query: document.getElementById('query').value,
+    query: address,
     boundingBox: map.getBounds()
   }).go().then(handleResults)
 }
@@ -64,13 +71,9 @@ function displayRoute(geoJSON) {
 function createRoute() {
   var routeOptions = {
     key: APIKEY,
-    locations: [],
+    locations: lnglats,
     travelMode: 'pedestrian'
   };
-
-  for (let i = 0; i < lnglats.length; i++) {
-    routeOptions.locations.push(lnglats[i]);
-  }
 
   tt.services.calculateRoute(routeOptions).go().then(
     function(routeData) {
@@ -91,32 +94,42 @@ function createRoute() {
   );
 }
 
-function createDiv (operation, section) {
-  let element = ''
-  if (operation.toUpperCase() === 'CLASS') {
-    element = `<div class="section" onclick="addtoSched(${section.crn})">`
-    element += `<ul><li><b>Section ${section.section}</b>`
-  } else if (operation.toUpperCase() === 'SCHEDULE') {
-    element = `<div class="sched-sect", onclick="removefromSched(${section.crn})">`
-    element += `<ul><li><b>${section.label} | Section ${section.section}</b>`
-  }
+function displaySchedule(section) {
+  let element = `<ul><li>${section.label}</li>`
   element += `<ul><li>Type: ${section.type}</li>`
-  element += `<li>CRN: ${section.crn}</li>`
   element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
   element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
-  element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
   element += '</ul></li></ul></div>'
   return element
 }
 
-function displaySchedule(day) {
+function displayScheduleRoute(day) {
+  // Resets classes, distance, and time
+  clear_();
+
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'));
+
+  let numberOfClasses = 0;
 
   for (let i = 0; i < schedule.length; i++) {
     if (schedule[i].days_of_week.includes(day)) {
-      document.getElementById('classes').innerHTML += createDiv('SCHEDULE', schedule[i]);
+      // Displays your classes
+      document.getElementById('classlist').innerHTML += displaySchedule(schedule[i]);
+      // Searches and plot the class location
+      let building = schedule[i].building.toUpperCase();
+      let address = addressMap.get(building);
+      // Finds the lng and lat of the building and stores them
+      search(address);
+
+      numberOfClasses += 1;
     }
   }
+  if (numberOfClasses === 0) {
+    document.getElementById('classlist').innerHTML += 'You have no classes on this day!';
+    return;
+  }
+  // Displays the route corresponding to each day
+  createRoute();
 }
 
 

@@ -14,27 +14,25 @@
             <a href="tomtom/tomtom.html">Map</a>
             <a href="../main/aboutus.html">About Us</a>
         </nav>
-        <!-- May get rid of search button later on -->
-        <p>Hello! Please insert building you want to see displayed here: <br> <i>Note: Some places do not work as it should.</i></p>
-        <input type="text" id="query" value="">
-        <button onclick="search()">Search</button>
 
         <h2>Schedule: </h2>
-        <input type ="button" onclick="displaySchedule('M')" value="Monday">
-        <input type ="button" onclick="displaySchedule('T')" value="Tuesday">
-        <input type ="button" onclick="displaySchedule('W')" value="Wednesday">
-        <input type ="button" onclick="displaySchedule('R')" value="Thursday">
-        <input type ="button" onclick="displaySchedule('F')" value="Friday">
-        
-        <div id="classes"></div>
+        <p>Click on the corresponding day, and your classes and optimized routes will displayed at the map below. 
+            <br><i>Right click and hold to view and adjust the map in a different perspective!</i></p>
 
-        <p>After searching your buildings, click the button below to display your route!</p>
-        <div><button onclick="createRoute()">Create my Route!</button></div>
+        <input type ="button" onclick="displayScheduleRoute('M')" value="Monday">
+        <input type ="button" onclick="displayScheduleRoute('T')" value="Tuesday">
+        <input type ="button" onclick="displayScheduleRoute('W')" value="Wednesday">
+        <input type ="button" onclick="displayScheduleRoute('R')" value="Thursday">
+        <input type ="button" onclick="displayScheduleRoute('F')" value="Friday">
+        
+        <div id="classlist"></div>
         <div id="distance"></div>
         <div id="time"></div>
 
-        <p>Your classes and optimized routes will displayed at the map below. <i>Right click and hold to view and adjust the map in a different perspective!</i></p>
         <div style="width:90vw; height:90vh;" id="mymap">Map</div>
+
+        <script src="../class_data/class_data.js"></script>
+        <script src="../schedule/address_map.js"></script>
         <script src="./tomtom.js"></script>
         
     </body>
