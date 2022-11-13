@@ -12,6 +12,7 @@ const map = tt.map({
 
 let lnglats = []; // Our list of building lnglat
 let markers = []; // Stores our markers
+let num_clicks = 0; // Keeps track of num of clicks and helps delete route layer ;-;
 
 // Does the moving map animation when you insert a location
 // function moveMap() {
@@ -39,6 +40,7 @@ function clear_() {
     mark.remove();
   }
   markers = [];
+  map.removeLayer('route' + num_clicks.toString());
 }
 
 // Handles search results
@@ -66,7 +68,7 @@ function search (address) {
 
 function displayRoute(geoJSON) {
   routeLayer = map.addLayer({
-    'id' : 'route',
+    'id' : 'route' + num_clicks.toString(),
     'type' : 'line',
     'source' : {
       'type' : 'geojson',
@@ -117,6 +119,7 @@ function displaySchedule(section) {
 function displayScheduleRoute(day) {
   // Resets classes, distance, and time
   clear_();
+  num_clicks += 1;
 
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'));
 
