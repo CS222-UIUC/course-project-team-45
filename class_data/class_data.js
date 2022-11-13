@@ -84,8 +84,12 @@ function removeSection (section) {
 function clearSchedule () {
   const schedule = []
   window.localStorage.setItem('SCHEDULE', JSON.stringify(schedule))
-  const entry = ''
-  document.getElementById('classes').innerHTML = entry
+  document.getElementById('Monday').innerHTML = ' '
+  document.getElementById('Tuesday').innerHTML = ' '
+  document.getElementById('Wednesday').innerHTML = ' '
+  document.getElementById('Thursday').innerHTML = ' '
+  document.getElementById('Friday').innerHTML = ' '
+  document.getElementById('Asynch').innerHTML = ' '
 }
 /*
 The object in the array has the following properties:
@@ -192,7 +196,27 @@ function addtoSched (crn) {
 
   console.log('adding schedule section')
 
-  document.getElementById('classes').innerHTML += createDiv('SCHEDULE', section)
+  //document.getElementById('classes').innerHTML += createDiv('SCHEDULE', section)
+  if (section.days_of_week === null) {
+    document.getElementById('Asynch').innerHTML += createDiv('SCHEDULE', section);
+    return;
+  }
+  if (section.days_of_week.includes("M")) {
+    document.getElementById('Monday').innerHTML += createDiv('SCHEDULE', section);
+  }
+  if (section.days_of_week.includes("T")) {
+    document.getElementById('Tuesday').innerHTML += createDiv('SCHEDULE', section);
+  }
+  if (section.days_of_week.includes("W")) {
+    document.getElementById('Wednesday').innerHTML += createDiv('SCHEDULE', section);
+  }
+  if (section.days_of_week.includes("R")) {
+    document.getElementById('Thursday').innerHTML += createDiv('SCHEDULE', section);
+  }
+  if (section.days_of_week.includes("F")) {
+    document.getElementById('Friday').innerHTML += createDiv('SCHEDULE', section);
+  }
+
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -201,19 +225,79 @@ function removefromSched (crn) {
   findSection(crn, 'REMOVE')
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
   console.log(schedule)
-  let entry = ''
+  //let entry = ''
+  let entryM = ''
+  let entryTu = ''
+  let entryW = ''
+  let entryTh = ''
+  let entryF = ''
+  let entryAsynch = ''
   for (const section of schedule) {
-    entry += createDiv('SCHEDULE', section)
+    if (section.days_of_week === null) {
+      entryAsynch += createDiv('SCHEDULE', section)
+      return;
+    }
+    if (section.days_of_week.includes("M")) {
+      entryM += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("T")) {
+      entryTu += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("W")) {
+      entryW += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("R")) {
+      entryTh += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("F")) {
+      entryF += createDiv('SCHEDULE', section)
+    }
   }
-  document.getElementById('classes').innerHTML = entry
+  document.getElementById('Monday').innerHTML = entryM
+  document.getElementById('Tuesday').innerHTML = entryTu
+  document.getElementById('Wednesday').innerHTML = entryW
+  document.getElementById('Thursday').innerHTML = entryTh
+  document.getElementById('Friday').innerHTML = entryF
+  document.getElementById('Asynch').innerHTML = entryAsynch
+  //document.getElementById('classes').innerHTML = entry
 }
 
 function displaySchedule() {
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-  let entry = ''
+  let entryM = ''
+  let entryTu = ''
+  let entryW = ''
+  let entryTh = ''
+  let entryF = ''
+  let entryAsynch = ''
   for (const section of schedule) {
-    entry += createDiv('SCHEDULE', section)
+    //entry += createDiv('SCHEDULE', section)
+    if (section.days_of_week === null) {
+      entryAsynch += createDiv('SCHEDULE', section)
+      return;
+    }
+    if (section.days_of_week.includes("M")) {
+      entryM += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("T")) {
+      entryTu += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("W")) {
+      entryW += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("R")) {
+      entryTh += createDiv('SCHEDULE', section)
+    }
+    if (section.days_of_week.includes("F")) {
+      entryF += createDiv('SCHEDULE', section)
+    }
   }
-  document.getElementById('classes').innerHTML = entry
+  document.getElementById('Monday').innerHTML = entryM
+  document.getElementById('Tuesday').innerHTML = entryTu
+  document.getElementById('Wednesday').innerHTML = entryW
+  document.getElementById('Thursday').innerHTML = entryTh
+  document.getElementById('Friday').innerHTML = entryF
+  document.getElementById('Asynch').innerHTML = entryAsynch
+  //document.getElementById('classes').innerHTML = entry
   console.log("loaded")
 }
