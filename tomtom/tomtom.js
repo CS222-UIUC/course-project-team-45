@@ -8,22 +8,22 @@ var map = tt.map({
   zoom: 13,
   style: 'tomtom://vector/1/basic-main'
 });
-var lnglats = [] // Our list of building lnglat
+let lnglats = [] // Our list of building lnglat
 
 
 // Does the moving map animation when you insert a location
-function moveMap(lnglat) {
-  map.flyTo({
-    center: lnglat,
-    zoom: 18
-  });
-}
+// function moveMap(lnglat) {
+//   map.flyTo({
+//     center: lnglat,
+//     zoom: 18
+//   });
+// }
 
 // Handles search results
 function handleResults(result) {
   console.log(result);
   if (result.results) {
-    moveMap(result.results[0].position); // Long and latitude
+    // moveMap(result.results[0].position); // Long and latitude
 
     lnglats.push(result.results[0].position); // Puts your result's lnglat into lnglats list to be used in route display
 
@@ -88,6 +88,35 @@ function createRoute() {
     }
   );
 }
+
+function createDiv (operation, section) {
+  let element = ''
+  if (operation.toUpperCase() === 'CLASS') {
+    element = `<div class="section" onclick="addtoSched(${section.crn})">`
+    element += `<ul><li><b>Section ${section.section}</b>`
+  } else if (operation.toUpperCase() === 'SCHEDULE') {
+    element = `<div class="sched-sect", onclick="removefromSched(${section.crn})">`
+    element += `<ul><li><b>${section.label} | Section ${section.section}</b>`
+  }
+  element += `<ul><li>Type: ${section.type}</li>`
+  element += `<li>CRN: ${section.crn}</li>`
+  element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
+  element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
+  element = (section.days_of_week === null) ? element + '<li>Days of Week: N/A</li>' : element + `<li>Days of Week: ${section.days_of_week}</li>`
+  element += '</ul></li></ul></div>'
+  return element
+}
+
+function displaySchedule(day) {
+  const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'));
+
+  for (let i = 0; i < schedule.length; i++) {
+    if (schedule[i].days_of_week.includes(day)) {
+      document.getElementById('classes').innerHTML += createDiv('SCHEDULE', schedule[i]);
+    }
+  }
+}
+
 
 /*
 async function getTomTomDirections() {

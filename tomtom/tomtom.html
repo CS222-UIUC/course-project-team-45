@@ -18,7 +18,16 @@
         <p>Hello! Please insert building you want to see displayed here: <br> <i>Note: Some places do not work as it should.</i></p>
         <input type="text" id="query" value="">
         <button onclick="search()">Search</button>
+
+        <h2>Schedule: </h2>
+        <input type ="button" onclick="displaySchedule('M')" value="Monday">
+        <input type ="button" onclick="displaySchedule('T')" value="Tuesday">
+        <input type ="button" onclick="displaySchedule('W')" value="Wednesday">
+        <input type ="button" onclick="displaySchedule('R')" value="Thursday">
+        <input type ="button" onclick="displaySchedule('F')" value="Friday">
         
+        <div id="classes"></div>
+
         <p>After searching your buildings, click the button below to display your route!</p>
         <div><button onclick="createRoute()">Create my Route!</button></div>
         <div id="distance"></div>
