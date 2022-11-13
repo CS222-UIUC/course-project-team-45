@@ -1,8 +1,8 @@
 // Displays the map centered at UIUC
-const APIKEY = 'AvmH2sk25s5jn09Mhc980ITYPNpfAm31';
+const APIKEY = '2qRsV2zsyz62ggkkqfXG2xWuqrnOaGSi';
 const UIUC = [-88.2272, 40.1020];
-/* eslint-disable no-undef */
-const map = tt.map({
+
+var map = tt.map({
   key: APIKEY,
   container: 'mymap',
   center: UIUC,
@@ -10,20 +10,19 @@ const map = tt.map({
   style: 'tomtom://vector/1/basic-main'
 });
 
-let lnglats = []; // Our list of building lnglat
-let markers = []; // Stores our markers
-let num_clicks = 0; // Keeps track of num of clicks and helps delete route layer ;-;
+var markers = []; // Stores our markers
+var num_clicks = 0; // Keeps track of num of clicks and helps delete route layer ;-;
 
 // Does the moving map animation when you insert a location
 // function moveMap() {
 //   var lng = 0;
 //   var lat = 0;
-//   for(var i = 0; i < lnglats.length; i++) {
-//       lng += lnglats[i][0];
-//       lat += lnglats[i][1];
+//   for(mark of markers) {
+//       lng += mark.getLngLat()[0];
+//       lat += mark.getLngLat()[1];
 //   }
-//   lng = lng / lnglats.length;
-//   lat = lat / lnglats.length;
+//   lng = lng / markers.length;
+//   lat = lat / markers.length;
 
 //   map.flyTo({
 //     center: [lng,lat],
@@ -36,10 +35,6 @@ function clear_() {
   document.getElementById('classlist').innerHTML = '';
   document.getElementById('distance').innerHTML = '';
   document.getElementById('time').innerHTML = '';
-  for (mark of markers) {
-    mark.remove();
-  }
-  markers = [];
   map.removeLayer('route' + num_clicks.toString());
 }
 
@@ -47,13 +42,11 @@ function clear_() {
 function handleResults (result) {
   console.log(result)
   if (result.results) {
-    lnglats.push(result.results[0].position); // Stores your result's lnglat to be used in route display
-
     // Creates a marker on lnglat
-    const marker = new tt.Marker();
+    const marker = new tt.Marker()
+      .setLngLat(result.results[0].position)
+      .addTo(map);
     markers.push(marker);
-
-    marker.setLngLat(result.results[0].position).addTo(map);
   }
 }
 
@@ -68,6 +61,7 @@ function search (address) {
 
 function displayRoute(geoJSON) {
   routeLayer = map.addLayer({
+    // Created a unique id bc deleting it is a pain
     'id' : 'route' + num_clicks.toString(),
     'type' : 'line',
     'source' : {
@@ -76,7 +70,7 @@ function displayRoute(geoJSON) {
     },
     'paint' : {
       'line-color' : 'blue',
-      'line-width' : 5,
+      'line-width' : 4,
     }
   });
 }
@@ -85,9 +79,12 @@ function displayRoute(geoJSON) {
 function createRoute() {
   var routeOptions = {
     key: APIKEY,
-    locations: lnglats,
+    locations: [],
     travelMode: 'pedestrian'
   };
+  for (mark of markers) {
+    routeOptions.locations.push(mark.getLngLat());
+  }
   tt.services.calculateRoute(routeOptions).go().then(
     function(routeData) {
       // Displays your distance and time
@@ -101,7 +98,9 @@ function createRoute() {
         + " min";
 
       console.log(routeData);
+      // Geolocates our lnglat
       var geo = routeData.toGeoJson();
+      // Displays a customizable route
       displayRoute(geo);
     }
   );
@@ -119,11 +118,11 @@ function displaySchedule(section) {
 function displayScheduleRoute(day) {
   // Resets classes, distance, and time
   clear_();
-  num_clicks += 1;
+  num_clicks ++;
 
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'));
 
-  let numberOfClasses = 0;
+  let num_Classes = 0;
 
   for (let i = 0; i < schedule.length; i++) {
     if (schedule[i].days_of_week.includes(day)) {
@@ -135,45 +134,22 @@ function displayScheduleRoute(day) {
       // Finds the lng and lat of the building and stores them
       search(address);
 
-      numberOfClasses += 1;
+      num_Classes ++;
     }
   }
-  if (numberOfClasses === 0) {
-    document.getElementById('classlist').innerHTML += '<p>You have no classes on this day! :D</p>';
+  if (num_Classes == 0) {
+    document.getElementById('classlist').innerHTML = '<p>You have no classes on this day! :D</p>';
     return;
   }
   // Displays the route corresponding to each day
   createRoute();
-
+  
   // Moves map based on the average lnglat of each location
   // moveMap();
-
-  // resets our paths after creating route
-  lnglats = [];
+  
+  // Deletes marker data after plotting Route
+  for (mark of markers) {
+    mark.remove();
+  }
+  markers = [];
 }
-
-
-/*
-async function getTomTomDirections() {
-    //need to add inputs to convert to lat and long, inputted as addresses
-    let baseUrl = 'https://api.tomtom.com/routing/1/calculateRoute/'
-    let lat1 = '52.50931';
-    let long1 = '13.42936';
-    let lat2 = '52.50274';
-    let long2 = '13.43872'
-    let loc1 = lat1 + '%2C' + long1;
-    let loc2 = lat2 + '%2C' + long2;
-    let location = loc1 + "%3A" + loc2;
-    baseUrl += location;
-    baseUrl += '/json?instructionsType=text&sectionType=pedestrian&report=effectiveSettings&routeType=shortest&travelMode=pedestrian&key=';
-    baseUrl += APIKEY;
-    //url is ready for request
-    await fetch(baseUrl).then((response) =>
-    response = response.json().then((jsonResponse) => {
-      let instructions = jsonResponse.guidance.instructionGroups.groupMessage;
-      console.log(instructions); // Outputs detailed directions to destination
-    })
-  )
-    //document.getElementById("test").innerHTML = baseUrl;//whatever the output is
-}
-*/
