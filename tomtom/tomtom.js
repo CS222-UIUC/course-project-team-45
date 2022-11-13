@@ -11,6 +11,7 @@ const map = tt.map({
 });
 
 let lnglats = []; // Our list of building lnglat
+let markers = []; // Stores our markers
 
 // Does the moving map animation when you insert a location
 // function moveMap(lnglat) {
@@ -25,8 +26,10 @@ function clear_() {
   document.getElementById('classlist').innerHTML = '';
   document.getElementById('distance').innerHTML = '';
   document.getElementById('time').innerHTML = '';
-  //lnglats = [];
-  //clear();
+  lnglats = [];
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].remove();
+  }
 }
 
 // Handles search results
@@ -39,6 +42,8 @@ function handleResults (result) {
 
     // Creates a marker on lnglat
     const marker = new tt.Marker();
+    markers.push(marker);
+
     marker.setLngLat(result.results[0].position).addTo(map);
   }
 }
@@ -125,7 +130,7 @@ function displayScheduleRoute(day) {
     }
   }
   if (numberOfClasses === 0) {
-    document.getElementById('classlist').innerHTML += 'You have no classes on this day!';
+    document.getElementById('classlist').innerHTML += '<p>You have no classes on this day!</p>';
     return;
   }
   // Displays the route corresponding to each day
