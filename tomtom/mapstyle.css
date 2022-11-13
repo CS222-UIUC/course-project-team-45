@@ -1,0 +1,12 @@
+#info {
+    float:left;
+    background:white;
+    text-align: center;
+    width:40%; 
+    height:93vh;
+}
+#mymap {
+    float:right;
+    width:60%; 
+    height:93vh;
+}

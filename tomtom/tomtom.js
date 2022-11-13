@@ -14,9 +14,18 @@ let lnglats = []; // Our list of building lnglat
 let markers = []; // Stores our markers
 
 // Does the moving map animation when you insert a location
-// function moveMap(lnglat) {
+// function moveMap() {
+//   var lng = 0;
+//   var lat = 0;
+//   for(var i = 0; i < lnglats.length; i++) {
+//       lng += lnglats[i][0];
+//       lat += lnglats[i][1];
+//   }
+//   lng = lng / lnglats.length;
+//   lat = lat / lnglats.length;
+
 //   map.flyTo({
-//     center: lnglat,
+//     center: [lng,lat],
 //     zoom: 18
 //   });
 // }
@@ -36,7 +45,6 @@ function clear_() {
 function handleResults (result) {
   console.log(result)
   if (result.results) {
-    // moveMap(result.results[0].position); // Long and latitude
 
     lnglats.push(result.results[0].position); // Stores your result's lnglat to be used in route display
 
@@ -79,7 +87,6 @@ function createRoute() {
     locations: lnglats,
     travelMode: 'pedestrian'
   };
-
   tt.services.calculateRoute(routeOptions).go().then(
     function(routeData) {
       // Displays your distance and time
@@ -100,11 +107,11 @@ function createRoute() {
 }
 
 function displaySchedule(section) {
-  let element = `<ul><li>${section.label}</li>`
-  element += `<ul><li>Type: ${section.type}</li>`
-  element = (section.building === null) ? element + '<li>Location: <span id="buildingName">N/A<span></li>' : element + `<li>Location: ${section.room} <span id="buildingName">${section.building}<span></li>`
-  element = (section.start_time === 'ARRANGED') ? element + `<li>Time: ${section.start_time}</li>` : element + `<li>Time: ${section.start_time} - ${section.end_time}</li>`
-  element += '</ul></li></ul></div>'
+  let element = `<p>${section.label}<br>`
+  element += `Type: ${section.type}<br>`
+  element = (section.building === null) ? element + 'Location: <span id="buildingName">N/A<span><br>' : element + `Location: ${section.room} <span id="buildingName">${section.building}<span><br>`
+  element = (section.start_time === 'ARRANGED') ? element + `Time: ${section.start_time}` : element + `Time: ${section.start_time} - ${section.end_time}`
+  element += '<br></p>'
   return element
 }
 
@@ -130,11 +137,12 @@ function displayScheduleRoute(day) {
     }
   }
   if (numberOfClasses === 0) {
-    document.getElementById('classlist').innerHTML += '<p>You have no classes on this day!</p>';
+    document.getElementById('classlist').innerHTML += '<p>You have no classes on this day! :D</p>';
     return;
   }
   // Displays the route corresponding to each day
   createRoute();
+  //moveMap(); // Long and latitude
 }
 
 
