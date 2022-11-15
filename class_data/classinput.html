@@ -4,8 +4,9 @@
     <head>
         <title>Class Input</title>
         <link href="../main/style.css" rel="stylesheet">
+        <link href="./classinput.css" rel="stylesheet">
     </head>
-    <body>
+    <body onload= "displaySched()">
         <nav>
             <a href="../index.html">UIUC Class Path Optimizer</a>
             <a href="classinput.html">Class Input</a>
@@ -22,17 +23,20 @@
             <label for="fname">Number (124,225,etc): </label><br>
             <input type="text" id="inputbox2"><br><br>
 
-            <input type="button" value="Submit" onclick="takeinput()">
+            <input type="button" value="Submit" onclick="takeInput()">
             <input type="button" value="Clear Schedule" onclick="clearSchedule()">
-            <br>
-            <div id="listofstuffs">
+            <input type="button" value="Sort Schedule!" onclick="sortSchedule()">
+            <br> 
+            <div id="listofsections">
                 <h2>List of Sections: </h2>
                 <div id="options">
 
                 </div>
             </div>
+
             <div id="sched">
                 <h2>Schedule: </h2>
+                <h3>Current</h3>
                 <div id="classes">
 
                 </div>

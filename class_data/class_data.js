@@ -1,6 +1,3 @@
-const subjects = []
-const sections = []
-
 /*
 *   This function calls and returns the data from the API
 *   This function assumes the parameters are in the format string, number, string
@@ -84,8 +81,53 @@ function removeSection (section) {
 function clearSchedule () {
   const schedule = []
   window.localStorage.setItem('SCHEDULE', JSON.stringify(schedule))
-  const entry = ''
-  document.getElementById('classes').innerHTML = entry
+  document.getElementById('classes').innerHTML = ''
+}
+
+// eslint-disable-next-line no-unused-vars
+function sortSchedule () {
+  const sortedSchedule = [[], [], [], [], [], []]
+  const dowMap = new Map()
+  dowMap.set('M', 0)
+  dowMap.set('T', 1)
+  dowMap.set('W', 2)
+  dowMap.set('R', 3)
+  dowMap.set('F', 4)
+  dowMap.set('null', 5)
+  const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
+  console.log(schedule)
+  for (const section of schedule) {
+    console.log(section.days_of_week == null, section.days_of_week === null)
+    if (section.days_of_week == null) {
+      sortedSchedule[5].push(section)
+      continue
+    }
+    for (let i = 0; i < section.days_of_week.length; i++) {
+      sortedSchedule[dowMap.get(section.days_of_week.charAt(i))].push(section)
+    }
+  }
+  for (const day of sortedSchedule) {
+    day.sort((a, b) => {
+      if (a.start_time === 'ARRANGED' && b.start_time !== 'ARRANGED') {
+        return 1
+      } else if (a.start_time !== 'ARRANGED' && b.start_time === 'ARRANGED') {
+        return -1
+      } else if (a.start_time === 'ARRANGED' && b.start_time === 'ARRANGED') {
+        return 0
+      }
+      let aTime = (a.start_time.substring(a.start_time.length - 2, a.start_time.length) === 'AM') ? 0 : 12
+      let bTime = (b.start_time.substring(b.start_time.length - 2, b.start_time.length) === 'AM') ? 0 : 12
+
+      aTime += parseInt(a.start_time.substring(0, 2)) % 12
+      bTime += parseInt(b.start_time.substring(0, 2)) % 12
+
+      aTime += parseInt(a.start_time.substring(3, 5)) / 60
+      bTime += parseInt(b.start_time.substring(3, 5)) / 60
+
+      return aTime - bTime
+    })
+  }
+  window.localStorage.setItem('SORTED_SCHEDULE', JSON.stringify(sortedSchedule))
 }
 /*
 The object in the array has the following properties:
@@ -137,24 +179,25 @@ function findSection (crn, operation) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function takeinput () {
+function takeInput () {
   const value1 = document.getElementById('inputbox1').value.toUpperCase()
   const value2 = document.getElementById('inputbox2').value
-  subjects.push(value1)
-  sections.push(value2)
-  displayInputs()
+  const course = [value1, value2]
+  displayInputs(course)
 }
 
-async function displayInputs () {
-  let entry = ''
-  for (let i = 0; i < subjects.length; i++) {
-    entry += `<h3>${subjects[i] + sections[i]}</h3>`
-    // for loop here
-    await loadClassData(subjects[i], sections[i], 'Fall 2022')
-    for (const section of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
-      console.log('using class data')
-      entry += createDiv('CLASS', section)
-    }
+/* Displays a list of the course section
+ * passed into the function
+ * Course is a two value array that holds
+ * the subject and number (i.e. CS and 124)
+ * The first element is subject, the second
+ * is the number
+*/
+async function displayInputs (course) {
+  let entry = `<h3>${course[0] + course[1]}</h3>`
+  await loadClassData(course[0], course[1], 'Fall 2022')
+  for (const section of JSON.parse(window.localStorage.getItem('CLASS_DATA'))) {
+    entry += createDiv('CLASS', section)
   }
   document.getElementById('options').innerHTML = entry
 }
@@ -178,29 +221,19 @@ function createDiv (operation, section) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function deletePrev () {
-  subjects.pop()
-  sections.pop()
-  displayInputs()
-}
-
-// eslint-disable-next-line no-unused-vars
 function addtoSched (crn) {
   findSection(crn, 'ADD')
-  const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-  const section = schedule[schedule.length - 1]
-
-  console.log('adding schedule section')
-
-  document.getElementById('classes').innerHTML += createDiv('SCHEDULE', section)
+  displaySched()
 }
 
 // eslint-disable-next-line no-unused-vars
 function removefromSched (crn) {
-  console.log('Removing crn ', crn)
   findSection(crn, 'REMOVE')
+  displaySched()
+}
+
+function displaySched () {
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-  console.log(schedule)
   let entry = ''
   for (const section of schedule) {
     entry += createDiv('SCHEDULE', section)
