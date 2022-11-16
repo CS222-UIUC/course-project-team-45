@@ -81,7 +81,12 @@ function removeSection (section) {
 function clearSchedule () {
   const schedule = []
   window.localStorage.setItem('SCHEDULE', JSON.stringify(schedule))
-  document.getElementById('classes').innerHTML = ''
+  document.getElementById('Monday').innerHTML = ' '
+  document.getElementById('Tuesday').innerHTML = ' '
+  document.getElementById('Wednesday').innerHTML = ' '
+  document.getElementById('Thursday').innerHTML = ' '
+  document.getElementById('Friday').innerHTML = ' '
+  document.getElementById('Asynch').innerHTML = ' '
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -128,6 +133,7 @@ function sortSchedule () {
     })
   }
   window.localStorage.setItem('SORTED_SCHEDULE', JSON.stringify(sortedSchedule))
+  displaySchedSorted();
 }
 /*
 The object in the array has the following properties:
@@ -232,14 +238,55 @@ function removefromSched (crn) {
   displaySched()
 }
 
+function displaySchedSorted () {
+  const schedule = JSON.parse(window.localStorage.getItem('SORTED_SCHEDULE'))
+  let entryAsynch = ''
+  let entryM = ''
+  let entryTu = ''
+  let entryW = ''
+  let entryTh = ''
+  let entryF = ''
+  for (const section of schedule[0]) {
+    entryM += createDiv('SCHEDULE', section)
+  }
+  for (const section of schedule[1]) {
+    entryTu += createDiv('SCHEDULE', section)
+  }
+  for (const section of schedule[2]) {
+    entryW += createDiv('SCHEDULE', section)
+  }
+  for (const section of schedule[3]) {
+    entryTh += createDiv('SCHEDULE', section)
+  }
+  for (const section of schedule[4]) {
+    entryF += createDiv('SCHEDULE', section)
+  }
+  for (const section of schedule[5]) {
+    entryAsynch += createDiv('SCHEDULE', section)
+  }
+  document.getElementById('Monday').innerHTML = entryM
+  document.getElementById('Tuesday').innerHTML = entryTu
+  document.getElementById('Wednesday').innerHTML = entryW
+  document.getElementById('Thursday').innerHTML = entryTh
+  document.getElementById('Friday').innerHTML = entryF
+  document.getElementById('Asynch').innerHTML = entryAsynch
+  //document.getElementById('classes').innerHTML = entry
+  console.log("loaded")
+}
+
 function displaySched () {
   const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-  let entry = ''
+  let entryAsynch = ''
+  let entryM = ''
+  let entryTu = ''
+  let entryW = ''
+  let entryTh = ''
+  let entryF = ''
   for (const section of schedule) {
     //entry += createDiv('SCHEDULE', section)
     if (section.days_of_week === null) {
       entryAsynch += createDiv('SCHEDULE', section)
-      return;
+      continue;
     }
     if (section.days_of_week.includes("M")) {
       entryM += createDiv('SCHEDULE', section)
