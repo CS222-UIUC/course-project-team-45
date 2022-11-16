@@ -27,23 +27,4 @@ p {
   color: rgb(20 13 117);
   text-decoration: underline;
 }
-
-.section,
-.sched-sect {
-  background-color: transparent;
-  width: fit-content;
-  padding: 10px;
-}
-
-.section:hover,
-.sched-sect:hover {
-  background-color: green;
-}
-
-#listofstuffs,
-#sched {
-  width: fit-content;
-  min-width: 200px;
-  display: inline-grid;
-  margin: auto;
-}
+<<<<<<< HEAD
