@@ -18,14 +18,13 @@
 
         <div id="info">
             <h2>Schedule:</h2>
-            <p>Choose a day, and a route to your classes on that day will displayed at the map below!</p>
-            <p>You may have to double click on the button for it to display properly.<br><i>It's a work in progress ;-;</i></p>
+            <p>Please <b>DOUBLE CLICK</b> on a day, and a route to your classes will displayed at the map below!</p>
 
-            <input type ="button" onclick="displayScheduleRoute('M')" value="Monday">
-            <input type ="button" onclick="displayScheduleRoute('T')" value="Tuesday">
-            <input type ="button" onclick="displayScheduleRoute('W')" value="Wednesday">
-            <input type ="button" onclick="displayScheduleRoute('R')" value="Thursday">
-            <input type ="button" onclick="displayScheduleRoute('F')" value="Friday">
+            <input type ="button" onclick="plotMap(0)" value="Monday">
+            <input type ="button" onclick="plotMap(1)" value="Tuesday">
+            <input type ="button" onclick="plotMap(2)" value="Wednesday">
+            <input type ="button" onclick="plotMap(3)" value="Thursday">
+            <input type ="button" onclick="plotMap(4)" value="Friday">
             
             <div id="classlist"></div>
 
