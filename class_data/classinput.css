@@ -1,0 +1,21 @@
+.section,
+.sched-sect {
+  background-color: rgb(221, 163, 122);
+  width: auto;
+  padding: 10px;
+  border: 2px solid black;
+  margin: 5px;
+}
+
+.section:hover,
+.sched-sect:hover {
+  background-color: rgb(66, 156, 66);
+}
+
+#listofsections,
+#sched {
+  width: 25%;
+  padding: 10px;
+  float: left;
+  margin: 5px;
+}
