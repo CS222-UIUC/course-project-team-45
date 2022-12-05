@@ -11,6 +11,8 @@ var map = tt.map({
 });
 
 var markers = []; // Stores our markers
+var locations = [];
+var schedule = [];
 
 // Resets the map / schedule display if you click another button
 function clear_() {
@@ -18,10 +20,12 @@ function clear_() {
   document.getElementById('distance').innerHTML = '';
   document.getElementById('time').innerHTML = '';
   // Deletes marker data after plotting Route
-  // for (mark of markers) {
-  //   mark.remove();
-  // }
-  // markers = [];
+  for (mark of markers) {
+    mark.remove();
+  }
+  markers = [];
+  locations = [];
+  schedule = [];
 }
 
 // Adds location to map
@@ -29,10 +33,9 @@ function handleResults(result) {
   console.log(result)
   if (result.results) {
     // Creates a marker on lnglat
-    const marker = new tt.Marker()
-      .setLngLat(result.results[0].position)
-      .addTo(map);
+    const marker = new tt.Marker().setLngLat(result.results[0].position).addTo(map);
     markers.push(marker);
+    locations.push(result.results[0].position);
   }
 }
 
@@ -60,56 +63,78 @@ function displayRoute(geoJSON) {
   })
 }
 
-var doubleClick = false;
+var routeIsDisplayed = false;
+
 // Creates route from building address list
 function createRoute() {
   var routeOptions = {
     key: APIKEY,
-    locations: [],
+    locations: locations,
     travelMode: 'pedestrian'
   };
-  for (mark of markers) {
-    routeOptions.locations.push(mark.getLngLat());
-  }
   tt.services.calculateRoute(routeOptions).go().then(
     function(routeData) {
       // Displays your distance and time
-      if (!doubleClick) {
-        document.getElementById('distance').innerHTML = 
-          "Total distance: " 
-          + (routeData.routes[0].summary.lengthInMeters * 0.000621371).toFixed(2)
-          + " miles";
-        document.getElementById('time').innerHTML = 
-          "Approximate Time: " 
-          + (routeData.routes[0].summary.travelTimeInSeconds / 60).toFixed(2)
-          + " min";
-        doubleClick = true;
-      }
+      document.getElementById('distance').innerHTML = 
+        "<b>Total distance: " 
+        + (routeData.routes[0].summary.lengthInMeters * 0.000621371).toFixed(2)
+        + " mi</br>";
+      document.getElementById('time').innerHTML = 
+        "<b>Approximate Time: " 
+        + Math.floor(routeData.routes[0].summary.travelTimeInSeconds / 60)
+        + " min</b>";
+
+      calculateBetween(routeData.routes[0].legs);
 
       console.log(routeData);
       // Geolocates our lnglat
       var geo = routeData.toGeoJson();
-      // Displays a customizable route
       displayRoute(geo);
     }
   );
+  // Keep track if route is displayed in order to delete it later
+  routeIsDisplayed = true;
 }
 
 function displaySchedule(section) {
-  let element = `<p>${section.label} `
-  element += `(${section.type})<br>`
-  element = (section.building === null) ? element + 'Location: <span id="buildingName">N/A<span><br>' : element + `Location: ${section.room} <span id="buildingName">${section.building}<span><br>`
-  element = (section.start_time === 'ARRANGED') ? element + `Time: ${section.start_time}` : element + `Time: ${section.start_time} - ${section.end_time}`
-  element += '<br></p>'
+  let element = `<b><u><p>${section.label} `
+  element += `(${section.type})<br></u></b>`
+  element = (section.start_time === 'ARRANGED') ? element + `${section.start_time}` : element + `${section.start_time} - ${section.end_time}<br>`
+  element = (section.building === null) ? element + '<span id="buildingName">N/A<span><br>' : element + `${section.room} <span id="buildingName">${section.building}<span><br>`
+  element += '</p>'
   return element
 }
 
+// Calculates our time and distance between classes
+function calculateBetween(legs) {
+  document.getElementById('classlist').innerHTML = '';
+
+  for (let i = 0; i < schedule.length; i++) {
+    // Does not display time/distance for first class
+    // Displays time distance between classes
+    if (i > 0) {
+      let leg = legs[i - 1];
+      document.getElementById('classlist').innerHTML 
+        += "Distance: " 
+        + (leg.summary.lengthInMeters * 0.000621371).toFixed(2)
+        + " mi"
+        + "<br>"
+        + "Time: " 
+        + Math.floor(leg.summary.travelTimeInSeconds / 60)
+        + " min";
+    }
+    // Display classes
+    document.getElementById('classlist').innerHTML += displaySchedule(schedule[i]);
+  }
+}
+
 function plotMap(day) {
-  if (doubleClick) { location.reload(); }
-  
-  // Resets classes, distance, and time
   clear_();
-  const schedule = JSON.parse(window.localStorage.getItem('SORTED_SCHEDULE'))[day];
+  // If the route is displayed on map refresh page to remove it
+  if (routeIsDisplayed) { location.reload(); }  
+
+  schedule = JSON.parse(window.localStorage.getItem('SORTED_SCHEDULE'))[day];
+
   if (schedule.length == 0) {
     document.getElementById('classlist').innerHTML = '<p>You have no classes on this day! :D</p>';
     return;
@@ -117,14 +142,11 @@ function plotMap(day) {
 
   for (sched of schedule) {
     // Displays your classes
-    if (!doubleClick) {
-      document.getElementById('classlist').innerHTML += displaySchedule(sched);
-    }
+    document.getElementById('classlist').innerHTML += displaySchedule(sched);
     // Searches and plot the class location
     let building = sched.building.toUpperCase();
     let address = addressMap.get(building);
     // Finds the lng and lat of the building and stores them
     search(address);
-    createRoute();
   }
 }
