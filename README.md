@@ -8,4 +8,4 @@ The About Us link will bring you to our page that showcases the info of each tea
 
 Savannah was responsible for the frontend part of the project, and she chose the color scheme and provided pictures for the main page.
 Nehal and Daniel both worked on working with our UIUC class data API and incorporating that data into our Class Input page.
-Tiffany was responsible for working with the TomTom API and using the API’s functions to create the map page.
+Tiffany and Savannah were responsible for working with the TomTom API and using the API’s functions to create the map page.
