@@ -33,7 +33,7 @@ p {
 .description {
   box-sizing: content-box;
   width: 50%;
-  background: rgba(242, 184, 142,1);
+  background: rgba(242 184 142 / 1);
   padding: 15px;
   border: 5px solid navy;
   border-top: 0px;
