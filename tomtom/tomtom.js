@@ -1,7 +1,9 @@
 // Displays the map centered at UIUC
-const APIKEY = 'AvmH2sk25s5jn09Mhc980ITYPNpfAm31'
+// eslint-disable-next-line no-undef
+const APIKEY = config.APIKEY
 const UIUC = [-88.2272, 40.1020]
-/* eslint-disable no-undef */
+
+// eslint-disable-next-line no-undef
 const map = tt.map({
   key: APIKEY,
   container: 'mymap',
@@ -10,55 +12,39 @@ const map = tt.map({
   style: 'tomtom://vector/1/basic-main'
 })
 
-let lnglats = [] // Our list of building lnglat
-let markers = [] // Stores our markers
-let num_clicks = 0 // Keeps track of num of clicks and helps delete route layer ;-;
+let markers = []
+let locate = []
+let schedule = []
 
-// Does the moving map animation when you insert a location
-// function moveMap() {
-//   var lng = 0;
-//   var lat = 0;
-//   for(var i = 0; i < lnglats.length; i++) {
-//       lng += lnglats[i][0];
-//       lat += lnglats[i][1];
-//   }
-//   lng = lng / lnglats.length;
-//   lat = lat / lnglats.length;
-
-//   map.flyTo({
-//     center: [lng,lat],
-//     zoom: 18
-//   });
-// }
-
-// Resets the map / schedule display if you click another button
+// Clears schedule display if you click another button
 function clear_ () {
   document.getElementById('classlist').innerHTML = ''
   document.getElementById('distance').innerHTML = ''
   document.getElementById('time').innerHTML = ''
-  for (mark of markers) {
+  // Deletes marker data after plotting Route
+  for (const mark of markers) {
     mark.remove()
   }
   markers = []
-  map.removeLayer('route' + num_clicks.toString())
+  locate = []
+  schedule = []
 }
 
-// Handles search results
+// Adds martkers to map and keeps tracks of each marker's latlng
 function handleResults (result) {
   console.log(result)
   if (result.results) {
-    lnglats.push(result.results[0].position) // Stores your result's lnglat to be used in route display
-
     // Creates a marker on lnglat
-    const marker = new tt.Marker()
+    // eslint-disable-next-line no-undef
+    const marker = new tt.Marker().setLngLat(result.results[0].position).addTo(map)
     markers.push(marker)
-
-    marker.setLngLat(result.results[0].position).addTo(map)
+    locate.push(result.results[0].position)
   }
 }
 
 // Helps find location data
 function search (address) {
+  // eslint-disable-next-line no-undef
   tt.services.fuzzySearch({
     key: APIKEY,
     query: address,
@@ -66,9 +52,10 @@ function search (address) {
   }).go().then(handleResults)
 }
 
+// Displays Route and is customizable
 function displayRoute (geoJSON) {
-  routeLayer = map.addLayer({
-    id: 'route' + num_clicks.toString(),
+  map.addLayer({
+    id: 'route',
     type: 'line',
     source: {
       type: 'geojson',
@@ -81,98 +68,97 @@ function displayRoute (geoJSON) {
   })
 }
 
-// Creates route from building address list
+// Keep track if route is displayed in order to delete route layer later
+let routeIsDisplayed = false
+
+// Creates route from building address list and computes distance and time
+// eslint-disable-next-line no-unused-vars
 function createRoute () {
   const routeOptions = {
     key: APIKEY,
-    locations: lnglats,
+    locations: locate,
     travelMode: 'pedestrian'
   }
+  // eslint-disable-next-line no-undef
   tt.services.calculateRoute(routeOptions).go().then(
     function (routeData) {
       // Displays your distance and time
       document.getElementById('distance').innerHTML =
-        'Total distance: ' +
+        '<b>Total distance: ' +
         (routeData.routes[0].summary.lengthInMeters * 0.000621371).toFixed(2) +
-        ' miles'
+        ' mi</br>'
       document.getElementById('time').innerHTML =
-        'Approximate Time: ' +
-        (routeData.routes[0].summary.travelTimeInSeconds / 60).toFixed(2) +
-        ' min'
+        '<b>Approximate Time: ' +
+        Math.floor(routeData.routes[0].summary.travelTimeInSeconds / 60) +
+        ' min</b>'
+
+      calculateBetween(routeData.routes[0].legs)
 
       console.log(routeData)
+
+      // Geolocates our lnglat
       const geo = routeData.toGeoJson()
       displayRoute(geo)
+      routeIsDisplayed = true
     }
   )
 }
 
 function displaySchedule (section) {
-  let element = `<p>${section.label} `
-  element += `(${section.type})<br>`
-  element = (section.building === null) ? element + 'Location: <span id="buildingName">N/A<span><br>' : element + `Location: ${section.room} <span id="buildingName">${section.building}<span><br>`
-  element = (section.start_time === 'ARRANGED') ? element + `Time: ${section.start_time}` : element + `Time: ${section.start_time} - ${section.end_time}`
-  element += '<br></p>'
+  let element = `<b><u><p>${section.label} `
+  element += `(${section.type})<br></u></b>`
+  element = (section.start_time === 'ARRANGED') ? element + `${section.start_time}` : element + `${section.start_time} - ${section.end_time}<br>`
+  element = (section.building === null) ? element + '<span id="buildingName">N/A<span><br>' : element + `${section.room} <span id="buildingName">${section.building}<span><br>`
+  element += '</p>'
   return element
 }
 
-function displayScheduleRoute (day) {
-  // Resets classes, distance, and time
-  clear_()
-  num_clicks += 1
-
-  const schedule = JSON.parse(window.localStorage.getItem('SCHEDULE'))
-
-  let numberOfClasses = 0
+// Calculates our time and distance between classes
+function calculateBetween (legs) {
+  document.getElementById('classlist').innerHTML = ''
 
   for (let i = 0; i < schedule.length; i++) {
-    if (schedule[i].days_of_week.includes(day)) {
-      // Displays your classes
-      document.getElementById('classlist').innerHTML += displaySchedule(schedule[i])
-      // Searches and plot the class location
-      const building = schedule[i].building.toUpperCase()
-      const address = addressMap.get(building)
-      // Finds the lng and lat of the building and stores them
-      search(address)
-
-      numberOfClasses += 1
+    // Does not display time/distance for first class
+    // Displays time distance between classes
+    if (i > 0) {
+      const leg = legs[i - 1]
+      document.getElementById('classlist').innerHTML +=
+      'Distance: ' +
+      (leg.summary.lengthInMeters * 0.000621371).toFixed(2) +
+      ' mi' +
+      '<br>' +
+      'Time: ' +
+      Math.floor(leg.summary.travelTimeInSeconds / 60) +
+      ' min'
     }
+    // Display classes
+    document.getElementById('classlist').innerHTML += displaySchedule(schedule[i])
   }
-  if (numberOfClasses === 0) {
-    document.getElementById('classlist').innerHTML += '<p>You have no classes on this day! :D</p>'
+}
+
+// eslint-disable-next-line no-unused-vars
+function plotMap (day) {
+  clear_()
+  // If the route is displayed on map refresh page to remove it
+  if (routeIsDisplayed) {
+    location.reload()
+  }
+
+  schedule = JSON.parse(window.localStorage.getItem('SORTED_SCHEDULE'))[day]
+
+  if (schedule.length === 0) {
+    document.getElementById('classlist').innerHTML = '<p>You have no classes on this day! :D</p>'
     return
   }
-  // Displays the route corresponding to each day
-  createRoute()
 
-  // Moves map based on the average lnglat of each location
-  // moveMap();
-
-  // resets our paths after creating route
-  lnglats = []
+  for (const sched of schedule) {
+    // Displays your classes
+    document.getElementById('classlist').innerHTML += displaySchedule(sched)
+    // Searches and plot the class location
+    const building = sched.building.toUpperCase()
+    // eslint-disable-next-line no-undef
+    const address = addressMap.get(building)
+    // Finds the lng and lat of the building and stores them
+    search(address)
+  }
 }
-
-/*
-async function getTomTomDirections() {
-    //need to add inputs to convert to lat and long, inputted as addresses
-    let baseUrl = 'https://api.tomtom.com/routing/1/calculateRoute/'
-    let lat1 = '52.50931';
-    let long1 = '13.42936';
-    let lat2 = '52.50274';
-    let long2 = '13.43872'
-    let loc1 = lat1 + '%2C' + long1;
-    let loc2 = lat2 + '%2C' + long2;
-    let location = loc1 + "%3A" + loc2;
-    baseUrl += location;
-    baseUrl += '/json?instructionsType=text&sectionType=pedestrian&report=effectiveSettings&routeType=shortest&travelMode=pedestrian&key=';
-    baseUrl += APIKEY;
-    //url is ready for request
-    await fetch(baseUrl).then((response) =>
-    response = response.json().then((jsonResponse) => {
-      let instructions = jsonResponse.guidance.instructionGroups.groupMessage;
-      console.log(instructions); // Outputs detailed directions to destination
-    })
-  )
-    //document.getElementById("test").innerHTML = baseUrl;//whatever the output is
-}
-*/

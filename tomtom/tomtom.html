@@ -4,11 +4,15 @@
         <title>TomTomTesting</title>
         <link href="../main/style.css" rel="stylesheet">
         <link href="mapstyle.css" rel="stylesheet">
+    </head>
+    <body onload = "sortSchedule()">
+        <script type="text/javascript" src="../config.js"></script>
+        <script type="text/javascript" src="../script.js"></script>
+
         <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps.css">
         <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps-web.min.js"></script>
         <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/services/services-web.min.js"></script>
-    </head>
-    <body onload = "sortSchedule()">
+        
         <nav>
             <a href="../index.html">UIUC Class Path Optimizer</a>
             <a href="../class_data/classinput.html">Class Input</a>
@@ -18,15 +22,15 @@
 
         <div id="info">
             <h2>Schedule:</h2>
-            <p>Choose a day, and a route to your classes on that day will displayed at the map below!</p>
-            <p>You may have to double click on the button for it to display properly.<br><i>It's a work in progress ;-;</i></p>
 
-            <input type ="button" onclick="displayScheduleRoute('M')" value="Monday">
-            <input type ="button" onclick="displayScheduleRoute('T')" value="Tuesday">
-            <input type ="button" onclick="displayScheduleRoute('W')" value="Wednesday">
-            <input type ="button" onclick="displayScheduleRoute('R')" value="Thursday">
-            <input type ="button" onclick="displayScheduleRoute('F')" value="Friday">
-            
+            <p>Please on a day, and click on <i>Display My Route!</i> <br> to display your route between classes on the map!</p>
+
+            <input type ="button" onclick="plotMap(0)" value="Monday">
+            <input type ="button" onclick="plotMap(1)" value="Tuesday">
+            <input type ="button" onclick="plotMap(2)" value="Wednesday">
+            <input type ="button" onclick="plotMap(3)" value="Thursday">
+            <input type ="button" onclick="plotMap(4)" value="Friday">
+            <p><input type = "button" onclick="createRoute();" value="Display My Route!"></p>
             <div id="classlist"></div>
 
             <div id="test"></div>

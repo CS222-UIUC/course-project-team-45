@@ -1,15 +1,17 @@
 #info {
-    float:left;
-    background:white;
-    text-align: center;
-    padding: 0px 20px;
-    width:35%; 
-    height:93vh;
-    border: 5px solid navy;
+  float: left;
+  background: white;
+  text-align: center;
+  width: 37%;
+  height: 93vh;
+  border: 5px solid navy;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
+
 #mymap {
-    float:right;
-    width:60%; 
-    height:93vh;
-    border: 5px solid navy;
+  float: right;
+  width: 60%;
+  height: 93vh;
+  border: 5px solid navy;
 }
