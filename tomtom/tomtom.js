@@ -1,5 +1,5 @@
 // Displays the map centered at UIUC
-const APIKEY = '2qRsV2zsyz62ggkkqfXG2xWuqrnOaGSi';
+const APIKEY = config.APIKEY;
 const UIUC = [-88.2272, 40.1020];
 
 var map = tt.map({
