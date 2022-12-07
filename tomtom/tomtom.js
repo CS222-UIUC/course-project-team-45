@@ -107,9 +107,15 @@ function createRoute () {
 function displaySchedule (section) {
   let element = `<b><u><p>${section.label} `
   element += `(${section.type})<br></u></b>`
-  element = (section.start_time === 'ARRANGED') ? element + `${section.start_time}` : element + `${section.start_time} - ${section.end_time}<br>`
-  element = (section.building === null) ? element + '<span id="buildingName">N/A<span><br>' : element + `${section.room} <span id="buildingName">${section.building}<span><br>`
+
+  element = (section.start_time === 'ARRANGED') ? element +
+  `${section.start_time}` : element + `${section.start_time} - ${section.end_time}<br>`
+
+  element = (section.building === null) ? element +
+  '<span id="buildingName">N/A<span><br>' : element +
+  `${section.room} <span id="buildingName">${section.building}<span><br>`
   element += '</p>'
+
   return element
 }
 
@@ -140,7 +146,9 @@ function calculateBetween (legs) {
 function plotMap (day) {
   clear_()
   // If the route is displayed on map refresh page to remove it
-  if (routeIsDisplayed) { location.reload() }
+  if (routeIsDisplayed) {
+    location.reload()
+  }
 
   schedule = JSON.parse(window.localStorage.getItem('SORTED_SCHEDULE'))[day]
 
