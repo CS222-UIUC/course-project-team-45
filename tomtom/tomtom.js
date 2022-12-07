@@ -2,7 +2,7 @@
 const APIKEY = config.APIKEY
 const UIUC = [-88.2272, 40.1020]
 
-let map = tt.map({
+const map = tt.map({
   key: APIKEY,
   container: 'mymap',
   center: UIUC,
@@ -10,32 +10,32 @@ let map = tt.map({
   style: 'tomtom://vector/1/basic-main'
 })
 
-let markers = [] // Stores our markers
-let locations = []
+let markers = []
+let locate = []
 let schedule = []
 
-// Resets the map / schedule display if you click another button
+// Clears schedule display if you click another button
 function clear_ () {
   document.getElementById('classlist').innerHTML = ''
   document.getElementById('distance').innerHTML = ''
   document.getElementById('time').innerHTML = ''
   // Deletes marker data after plotting Route
-  for (let mark of markers) {
+  for (const mark of markers) {
     mark.remove()
   }
   markers = []
-  locations = []
+  locate = []
   schedule = []
 }
 
-// Adds location to map
+// Adds martkers to map and keeps tracks of each marker's latlng
 function handleResults (result) {
   console.log(result)
   if (result.results) {
     // Creates a marker on lnglat
     const marker = new tt.Marker().setLngLat(result.results[0].position).addTo(map)
     markers.push(marker)
-    locations.push(result.results[0].position)
+    locate.push(result.results[0].position)
   }
 }
 
@@ -48,8 +48,9 @@ function search (address) {
   }).go().then(handleResults)
 }
 
+// Displays Route and is customizable
 function displayRoute (geoJSON) {
-  routeLayer = map.addLayer({
+  map.addLayer({
     id: 'route',
     type: 'line',
     source: {
@@ -63,13 +64,15 @@ function displayRoute (geoJSON) {
   })
 }
 
+// Keep track if route is displayed in order to delete route layer later
 let routeIsDisplayed = false
 
-// Creates route from building address list
+// Creates route from building address list and computes distance and time
+// eslint-disable-next-line no-unused-vars
 function createRoute () {
-  let routeOptions = {
+  const routeOptions = {
     key: APIKEY,
-    locations: locations,
+    locations: locate,
     travelMode: 'pedestrian'
   }
   tt.services.calculateRoute(routeOptions).go().then(
@@ -79,7 +82,7 @@ function createRoute () {
         '<b>Total distance: ' +
         (routeData.routes[0].summary.lengthInMeters * 0.000621371).toFixed(2) +
         ' mi</br>'
-      document.getElementById('time').innerHTML = 
+      document.getElementById('time').innerHTML =
         '<b>Approximate Time: ' +
         Math.floor(routeData.routes[0].summary.travelTimeInSeconds / 60) +
         ' min</b>'
@@ -87,13 +90,13 @@ function createRoute () {
       calculateBetween(routeData.routes[0].legs)
 
       console.log(routeData)
+
       // Geolocates our lnglat
-      let geo = routeData.toGeoJson()
+      const geo = routeData.toGeoJson()
       displayRoute(geo)
+      routeIsDisplayed = true
     }
   )
-  // Keep track if route is displayed in order to delete it later
-  routeIsDisplayed = true
 }
 
 function displaySchedule (section) {
@@ -128,6 +131,7 @@ function calculateBetween (legs) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function plotMap (day) {
   clear_()
   // If the route is displayed on map refresh page to remove it
@@ -140,7 +144,7 @@ function plotMap (day) {
     return
   }
 
-  for (let sched of schedule) {
+  for (const sched of schedule) {
     // Displays your classes
     document.getElementById('classlist').innerHTML += displaySchedule(sched)
     // Searches and plot the class location
