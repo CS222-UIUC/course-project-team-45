@@ -81,12 +81,12 @@ function removeSection (section) {
 function clearSchedule () {
   const schedule = []
   window.localStorage.setItem('SCHEDULE', JSON.stringify(schedule))
-  document.getElementById('Monday').innerHTML = ' '
-  document.getElementById('Tuesday').innerHTML = ' '
-  document.getElementById('Wednesday').innerHTML = ' '
-  document.getElementById('Thursday').innerHTML = ' '
-  document.getElementById('Friday').innerHTML = ' '
-  document.getElementById('Asynch').innerHTML = ' '
+  document.getElementById('monday').innerHTML = ' '
+  document.getElementById('tuesday').innerHTML = ' '
+  document.getElementById('wednesday').innerHTML = ' '
+  document.getElementById('thursday').innerHTML = ' '
+  document.getElementById('friday').innerHTML = ' '
+  document.getElementById('asynch').innerHTML = ' '
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -133,7 +133,7 @@ function sortSchedule () {
     })
   }
   window.localStorage.setItem('SORTED_SCHEDULE', JSON.stringify(sortedSchedule))
-  displaySchedSorted();
+  displaySchedSorted()
 }
 /*
 The object in the array has the following properties:
@@ -270,8 +270,8 @@ function displaySchedSorted () {
   document.getElementById('Thursday').innerHTML = entryTh
   document.getElementById('Friday').innerHTML = entryF
   document.getElementById('Asynch').innerHTML = entryAsynch
-  //document.getElementById('classes').innerHTML = entry
-  console.log("loaded")
+  // document.getElementById('classes').innerHTML = entry
+  console.log('loaded')
 }
 
 function displaySched () {
@@ -283,33 +283,33 @@ function displaySched () {
   let entryTh = ''
   let entryF = ''
   for (const section of schedule) {
-    //entry += createDiv('SCHEDULE', section)
+    // entry += createDiv('SCHEDULE', section)
     if (section.days_of_week === null) {
       entryAsynch += createDiv('SCHEDULE', section)
-      continue;
+      continue
     }
-    if (section.days_of_week.includes("M")) {
+    if (section.days_of_week.includes('M')) {
       entryM += createDiv('SCHEDULE', section)
     }
-    if (section.days_of_week.includes("T")) {
+    if (section.days_of_week.includes('T')) {
       entryTu += createDiv('SCHEDULE', section)
     }
-    if (section.days_of_week.includes("W")) {
+    if (section.days_of_week.includes('W')) {
       entryW += createDiv('SCHEDULE', section)
     }
-    if (section.days_of_week.includes("R")) {
+    if (section.days_of_week.includes('R')) {
       entryTh += createDiv('SCHEDULE', section)
     }
-    if (section.days_of_week.includes("F")) {
+    if (section.days_of_week.includes('F')) {
       entryF += createDiv('SCHEDULE', section)
     }
   }
-  document.getElementById('Monday').innerHTML = entryM
-  document.getElementById('Tuesday').innerHTML = entryTu
-  document.getElementById('Wednesday').innerHTML = entryW
-  document.getElementById('Thursday').innerHTML = entryTh
-  document.getElementById('Friday').innerHTML = entryF
-  document.getElementById('Asynch').innerHTML = entryAsynch
-  //document.getElementById('classes').innerHTML = entry
-  console.log("loaded")
+  document.getElementById('monday').innerHTML = entryM
+  document.getElementById('tuesday').innerHTML = entryTu
+  document.getElementById('wednesday').innerHTML = entryW
+  document.getElementById('thursday').innerHTML = entryTh
+  document.getElementById('friday').innerHTML = entryF
+  document.getElementById('asynch').innerHTML = entryAsynch
+  // document.getElementById('classes').innerHTML = entry
+  console.log('loaded')
 }
