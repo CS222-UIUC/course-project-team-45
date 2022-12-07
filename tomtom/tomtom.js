@@ -1,7 +1,9 @@
 // Displays the map centered at UIUC
+// eslint-disable-next-line no-undef
 const APIKEY = config.APIKEY
 const UIUC = [-88.2272, 40.1020]
 
+// eslint-disable-next-line no-undef
 const map = tt.map({
   key: APIKEY,
   container: 'mymap',
@@ -33,6 +35,7 @@ function handleResults (result) {
   console.log(result)
   if (result.results) {
     // Creates a marker on lnglat
+    // eslint-disable-next-line no-undef
     const marker = new tt.Marker().setLngLat(result.results[0].position).addTo(map)
     markers.push(marker)
     locate.push(result.results[0].position)
@@ -41,6 +44,7 @@ function handleResults (result) {
 
 // Helps find location data
 function search (address) {
+  // eslint-disable-next-line no-undef
   tt.services.fuzzySearch({
     key: APIKEY,
     query: address,
@@ -75,6 +79,7 @@ function createRoute () {
     locations: locate,
     travelMode: 'pedestrian'
   }
+  // eslint-disable-next-line no-undef
   tt.services.calculateRoute(routeOptions).go().then(
     function (routeData) {
       // Displays your distance and time
@@ -149,6 +154,7 @@ function plotMap (day) {
     document.getElementById('classlist').innerHTML += displaySchedule(sched)
     // Searches and plot the class location
     const building = sched.building.toUpperCase()
+    // eslint-disable-next-line no-undef
     const address = addressMap.get(building)
     // Finds the lng and lat of the building and stores them
     search(address)
