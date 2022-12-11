@@ -30,6 +30,7 @@ function clear_ () {
   schedule = []
 }
 
+// Code is inspired by TomTom API guides
 // Adds martkers to map and keeps tracks of each marker's latlng
 function handleResults (result) {
   console.log(result)
@@ -42,6 +43,7 @@ function handleResults (result) {
   }
 }
 
+// Code is inspired by TomTom API guides
 // Helps find location data
 function search (address) {
   // eslint-disable-next-line no-undef
@@ -52,6 +54,7 @@ function search (address) {
   }).go().then(handleResults)
 }
 
+// Code is inspired by TomTom API guides
 // Displays Route and is customizable
 function displayRoute (geoJSON) {
   map.addLayer({
@@ -71,6 +74,7 @@ function displayRoute (geoJSON) {
 // Keep track if route is displayed in order to delete route layer later
 let routeIsDisplayed = false
 
+// Code is inspired by TomTom API guides
 // Creates route from building address list and computes distance and time
 // eslint-disable-next-line no-unused-vars
 function createRoute () {
