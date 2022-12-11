@@ -6,6 +6,8 @@
   The Map link will bring you to the main part of our project. Click on a day in the left side box, and click on “Display My Route!” This will display the route on the map on the right side along with the distances and times between each class.
 The About Us link will bring you to our page that showcases the info of each teammate including our GitHub, LinkedIn, and more.
 
+The API used for class data can be found here : https://uiuc-course-api.herokuapp.com/
+
 In order to have our code properly be displayed, you must create your own API key in the TomTom API site. You will need to create an account to be able to generate your key. After you create your account, go click on the icon on the top right then go to Dashboard. From there, you will be able to generate your API key.
 Copy your API key, and go to tomtom.js in the tomtom folder. In there, you will adjust the variable APIKEY and replace config.APIKEY with your personal API key (be sure to set it as a string with " "). Then, use an extension to view the site (we recommend “Live Server” if you are using VSCode). Once you are able to display the site properly, have fun exploring through it!
 
