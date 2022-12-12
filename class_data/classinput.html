@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Class Input</title>
+        <link href="../main/style.css" rel="stylesheet">
+        <link href="./classinput.css" rel="stylesheet">
+    </head>
+    <body onload= "displaySched()">
+        <nav>
+            <a href="../index.html">UIUC Class Path Optimizer</a>
+            <a href="classinput.html">Class Input</a>
+            <a href="../tomtom/tomtom.html">Map</a>
+            <a href="../main/aboutus.html">About Us</a>
+        </nav>
+        <script src = "class_data.js"></script>
+        <main>
+            <h1 class="title">Class Input</h1>
+            <p class="description">Input the information about the classes that you are currently taking.</p>
+            <!--replace with a form to input classes-->
+            <label for="fname">Subject (CS,ECE,etc): </label><br>
+            <input type="text" id="inputbox1"><br><br>
+            <label for="fname">Number (124,225,etc): </label><br>
+            <input type="text" id="inputbox2"><br><br>
+
+            <input type="button" value="Submit" onclick="takeInput()">
+            <input type="button" value="Clear Schedule" onclick="clearSchedule()">
+            <input type="button" value="Sort Schedule!" onclick="sortSchedule()">
+            <br> 
+            <div id="listofsections">
+                <h2>List of Sections: </h2>
+                <div id="options">
+
+                </div>
+            </div>
+
+            <div id="sched">
+                <h2>Schedule: </h2>
+                <h3>Current</h3>
+                <div id="classes">
+                    <label>Monday</label>
+                    <div id="monday">
+                    
+                    </div>
+                    <label>Tuesday</label>
+                    <div id="tuesday">
+                    
+                    </div>
+                    <label>Wednesday</label>
+                    <div id="wednesday">
+                    
+                    </div>
+                    <label>Thursday</label>
+                    <div id="thursday">
+                    
+                    </div>
+                    <label>Friday</label>
+                    <div id="friday">
+                    
+                    </div>
+                    <label>Asynchronous</label>
+                    <div id="asynch">
+                    
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

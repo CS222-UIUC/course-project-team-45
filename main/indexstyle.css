@@ -1,0 +1,42 @@
+* {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.title {
+  font-weight: bold;
+  color: rgb(20 13 117);
+}
+
+body {
+  background-color: rgb(242 184 142);
+}
+
+nav {
+  font-weight: bold;
+  color: rgb(20 13 117);
+}
+
+p {
+  color: black;
+  font-weight: 400;
+}
+
+/* might change underline to bottom border */
+.bckimg {
+  min-height: 100vh;
+  background-image: url("../images/uiuccollage.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: 5px solid navy;
+}
+
+.description {
+  box-sizing: content-box;
+  width: 50%;
+  background: rgba(242 184 142 / 100%);
+  padding: 15px;
+  border: 5px solid navy;
+  border-top: 0;
+  text-align: center;
+  margin: auto;
+}
